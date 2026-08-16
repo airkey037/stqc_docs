@@ -12,7 +12,7 @@ Projekt jest udostępniony na licencji GNU GPL 3.0. Jej pełny zapis możesz zna
 
 Projekt jest podzielony na kilka folderów w celu łatwiejszej nawigacji:
 
-1. **STQC encoding and decoding** - dokumentacje w tym folderze są poświęcone stricte samemu standardowi STQC, czyli temu, jak enkodować i dekodować liczby do odpowiednich tonów. Dokumentacja dostępna w językach: Polski, Angielski. W podfolderze *examples/* znajdują się programy w Pythonie umożliwiające enkodowanie liczb do odpowiednich sekwencji STQC.
+1. **STQC encoding and decoding** - dokumentacje w tym folderze są poświęcone stricte samemu standardowi STQC, czyli temu, jak enkodować i dekodować liczby do odpowiednich tonów. Dokumentacja dostępna w językach: Polski, Angielski. W podfolderze *examples/* znajdują się programy w Pythonie umożliwiające enkodowanie i dekodowanie liczb do/z odpowiednich sekwencji STQC. [Źródło informacji](https://github.com/sq5bpf/multimon-ng-stqc)
 
 ---
 
@@ -24,4 +24,4 @@ Project is shared under terms of GNU GPL 3.0 licence. You can whole license in t
 
 Project is divided into folders for easier navigation:
 
-1. **STQC encoding and decoding** - documentations in this folder are focused stricte on the STQC standard - detailed instructions about encoding and encoding numbers to specific tones. Documentation is available in those languages: Polish, English. In the *examples/* subfolder you can find Python programs that encode numbers to STQC sequences.
+1. **STQC encoding and decoding** - documentations in this folder are focused stricte on the STQC standard - detailed instructions about encoding and encoding numbers to specific tones. Documentation is available in those languages: Polish, English. In the *examples/* subfolder you can find Python programs that can encode/decode numbers to/from STQC sequences. [Information source](https://github.com/sq5bpf/multimon-ng-stqc)

@@ -61,3 +61,5 @@ Ostatni krok to zamiana liczby zapisanej czwórkowo na zapis dziesiętny:
 **00001330** *(4)* = **124** *(10)*
 
 Zakodowana liczba to **124**.
+
+#### Przykładowe, w pełni udokumentowane, programy w Pythonie można znaleźć w folderze examples/

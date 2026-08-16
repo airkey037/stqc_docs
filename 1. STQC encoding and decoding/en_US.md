@@ -61,3 +61,5 @@ Last step: convert base from 4 to 10:
 **00001330** *(4)* = **124** *(10)*
 
 Result: **124** was the encoded number.
+
+#### Example Python program that can encode and decode STQC can be found in the examples/ folder

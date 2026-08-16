@@ -22,7 +22,7 @@ try:
 	to_encode = int(argv[1])
 except IndexError:
 	# Wyświetl wiadomość z pomocą
-	print("Poprawne użycie: python3 encode_en_US.py <liczba> <długość wyjścia (opcjonalnie)>")
+	print("Poprawne użycie: python3 encode_pl_PL.py <liczba> <długość wyjścia (opcjonalnie)>")
 	exit(0)
 except ValueError:
 	# Wartość wejściowa nie jest liczbą

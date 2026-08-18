@@ -8,6 +8,8 @@ W tym repozytorium znajdziesz pełną dokumentację standardu STQC, czyli system
 
 Źródła danych można znaleźć w pliku **CREDITS**.
 
+Niektóre programy zawarte w repozytorium wymagają programu [FFmpeg](https://ffmpeg.org/) do poprawnego działania.
+
 Projekt jest udostępniony na licencji GNU GPL 3.0. Jej pełny zapis możesz znaleźć w pliku **LICENSE**.
 
 Projekt jest podzielony na kilka folderów w celu łatwiejszej nawigacji:
@@ -19,6 +21,8 @@ Projekt jest podzielony na kilka folderów w celu łatwiejszej nawigacji:
 In this repository you can find full documentation of STQC - a system used by Polish firefighters to remotely enable and disable alarm sirens.
 
 You can find all data sources that I used to create this documentation in the **CREDITS** file.
+
+Some programs in this repo require [FFmpeg](https://ffmpeg.org/) to work.
 
 Project is shared under terms of GNU GPL 3.0 licence. You can whole license in the **LICENSE** file.
 

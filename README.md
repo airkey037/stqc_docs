@@ -28,4 +28,4 @@ Project is shared under terms of GNU GPL 3.0 licence. You can whole license in t
 
 Project is divided into folders for easier navigation:
 
-1. **STQC encoding and decoding** - documentations in this folder are focused stricte on the STQC standard - detailed instructions about encoding and encoding numbers to specific tones. Documentation is available in those languages: Polish, English. In the *examples/* subfolder you can find Python programs that can encode/decode numbers to/from STQC sequences. [Information source](https://github.com/sq5bpf/multimon-ng-stqc)
+1. **STQC encoding and decoding** - documentations in this folder are focused stricte on the STQC standard - detailed instructions about encoding and decoding numbers to specific tones. Documentation is available in those languages: Polish, English. In the *examples/* subfolder you can find Python programs that can encode/decode numbers to/from STQC sequences. [Information source](https://github.com/sq5bpf/multimon-ng-stqc)

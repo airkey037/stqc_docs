@@ -13,7 +13,7 @@ sequence = " ".join(argv)
 
 # Gdy sekwencja nie została podana, wyświetl pomoc
 if len(sequence) == 0:
-	print("Poprawne użycie: python3 generate_en_US.py <sekwencja>")
+	print("Poprawne użycie: python3 generate_pl_PL.py <sekwencja>")
 	exit(0)
 
 # Zdefiniuj stałe

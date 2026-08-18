@@ -62,6 +62,10 @@ Last step: convert base from 4 to 10:
 
 Result: **124** was the encoded number.
 
-#### Example Python program that can encode and decode STQC can be found in the examples/ folder
+---
 
-#### Example Python program that can generate tone from STQC sequence can be found in examples/soundgen/ folder. WARNING! [FFmpeg](https://ffmpeg.org/) is required!
+Example Python program that can encode and decode STQC can be found in the *examples/* folder
+
+Example Python program that can generate tone from STQC sequence can be found in *examples/soundgen/* folder.
+
+**WARNING!** [FFmpeg](https://ffmpeg.org/) is required! If you don't know, how to install FFmpeg, check *examples/soundgen/ffmpeg_install_en_US.md* 

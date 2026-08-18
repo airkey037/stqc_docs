@@ -68,3 +68,7 @@ When you have the command code, plug it to this table to get command name:
 **NOTE:** Please don't ask me, what those commands are doing - I don't have this information
 
 Result: 1 -> **ALARM**
+
+---
+
+In the *examples/* folder you can find example Python programs that are able to encode and decode unit ID and command.

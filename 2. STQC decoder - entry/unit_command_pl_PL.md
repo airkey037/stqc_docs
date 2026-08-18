@@ -38,7 +38,7 @@ Wynik: **82**
 
 ---
 
-## Read command
+## Komenda
 
 Aby odczytać komendę, dzielimy zdekodowaną sekwencję przez 1000 i zaokrąglamy w dół. Znów powiedzmy, że sekwencją jest **1082**:
 
@@ -68,3 +68,7 @@ Gdy masz już numer komendy, podstaw ją do tej tabelki, aby uzyskać jej nazwę
 **INFO:** Proszę nie kierować do mnie zapytań, co oznaczają te komendy - nie mam takich informacji.
 
 Wynik: 1 -> **ALARM**
+
+---
+
+W podfolderze *examples/* znajdują się przykładowe programy wPythonie umożliwiające enkodowanie i dekodowanie numeru jednostki i komendy.

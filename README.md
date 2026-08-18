@@ -1,3 +1,5 @@
+**INFO:** This documentation isn't finished yet. When it will be finished, this note will disapear / Dokumentacja jeszcze nie jest dokończona. Gdy ją dokończę, ta informacja zniknie
+
 # STQC Documentation
 
 ***NOTE:** English version below*

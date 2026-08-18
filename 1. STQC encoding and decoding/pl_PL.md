@@ -62,4 +62,6 @@ Ostatni krok to zamiana liczby zapisanej czwórkowo na zapis dziesiętny:
 
 Zakodowana liczba to **124**.
 
-#### Przykładowe, w pełni udokumentowane, programy w Pythonie można znaleźć w folderze examples/
+#### Przykładowe, w pełni udokumentowane, programy w Pythonie można znaleźć w folderze examples/.
+
+#### Program, który potrafi zakodować sekwencję do pliku .mp3 znajduje się w folderze examples/soundgen/. UWAGA! Do poprawnego działania wymagany jest [FFmpeg](https://ffmpeg.org/)

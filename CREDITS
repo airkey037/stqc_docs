@@ -1,3 +1,4 @@
 STQC standard docs source: https://github.com/sq5bpf/multimon-ng-stqc
+Some example programs require FFmpeg to work properly: https://ffmpeg.org/
 Information about select signals: https://serwerbartka.pl/dekoder-stqc/
 This documentation and examples created by AirKeyooo <airkeyooo@gmail.com>. See `git log` for more info

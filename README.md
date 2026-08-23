@@ -44,4 +44,4 @@ Project is divided into folders for easier navigation:
 3. **STQC decoder v2.10** - in this folder you can find (short) documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) in version 2.10 is decoding "powiat*" number.
 4. **STQC decoder v2.15** - in this folder you can find documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) is decoding voivodeship and "powiat*" number.
 
-\* I can't translate "powiat" to English, because there I don't know any good word that matches exactly its meaning. Generally Voivodeships in Poland are divided into smaller administration regions called "powiats".
+\* I can't translate "powiat" to English, because I don't know any good word that matches exactly its meaning. Generally Voivodeships in Poland are divided into smaller administration regions called "powiats".

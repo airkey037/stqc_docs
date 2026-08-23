@@ -34,9 +34,9 @@ except KeyError:
 	print(f"Specified command is not a valid command! Allowed: {", ".join(CMDS.keys())}")
 	exit(2)
 
-# Check, does unit ID fit in range 1-999
-if unit < 1 or unit > 999:
-	print("Unit ID have to fit in range 1-999!")
+# Check, does unit ID fit in range 0-999
+if unit < 0 or unit > 999:
+	print("Unit ID have to fit in range 0-999!")
 	exit(2)
 
 # Calculate and display the decimal representation of 2nd sequence

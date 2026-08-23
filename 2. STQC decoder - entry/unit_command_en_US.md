@@ -21,7 +21,7 @@ To get unit ID, after converting STQC sequence to a decimal number, use the **mo
 $$u = s \bmod 1000$$
 
 Where:
-* u - unit number
+* u - unit number (range 0-999)
 * s - decoded sequence
 
 Let's say, that the decoded 2nd sequence is **1082**:

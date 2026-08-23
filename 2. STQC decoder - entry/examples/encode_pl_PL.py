@@ -34,9 +34,9 @@ except KeyError:
 	print(f"Niepoprawna komenda! Dozwolone: {", ".join(CMDS.keys())}")
 	exit(2)
 
-# Sprawdź, czy numer jednostki mieści się w przedziale 1-999
-if unit < 1 or unit > 999:
-	print("Numer jednostki nie mieści się w przedziale 1-999!")
+# Sprawdź, czy numer jednostki mieści się w przedziale 0-999
+if unit < 0 or unit > 999:
+	print("Numer jednostki nie mieści się w przedziale 0-999!")
 	exit(2)
 
 # Oblicz i wyświetl dziesiętną reprezentację drugiej sekwencji

@@ -20,6 +20,8 @@ Then, we are decoding those first 4 digits (like in folder 1) and decoding them 
 
 Result: **10**
 
+Voivodeship number have to fit in range 0-63
+
 ---
 
 ## Decoding "powiat" number
@@ -35,6 +37,8 @@ Then, we are decoding it using instructions from folder 1:
 **0031** *(4)* = **13** *(10)*
 
 Result: **13**
+
+Powiat number have to fit in range 0-63.
 
 ---
 

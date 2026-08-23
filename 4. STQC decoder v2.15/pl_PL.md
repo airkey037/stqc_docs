@@ -20,6 +20,8 @@ Następnie dekodujemy je (używając metody z folderu 1). Tak otrzymamy numer wo
 
 Wynik: **10**
 
+Numer województwa musi być w zakresie 0-63.
+
 ---
 
 ## Dekodowanie numeru powiatu
@@ -35,6 +37,8 @@ I dekodujemy ją, używając metody z folderu 1:
 **0031** *(4)* = **13** *(10)*
 
 Wynik: **13**
+
+Numer powiatu musi zmieścić się w zakresie 0-63
 
 ---
 

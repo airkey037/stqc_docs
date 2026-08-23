@@ -21,7 +21,7 @@ Aby odczytać numer jednostki, po konwersji z sekwencji STQC na liczbę dziesię
 $$u = s \bmod 1000$$
 
 Gdzie:
-* u - numer jednostki
+* u - numer jednostki (z zakresu 0-999)
 * s - zdekodowana sekwencja
 
 Powiedzmy, że zdekodowaną drugą sekwencją jest **1082**:
@@ -71,4 +71,4 @@ Wynik: 1 -> **ALARM**
 
 ---
 
-W podfolderze *examples/* znajdują się przykładowe programy wPythonie umożliwiające enkodowanie i dekodowanie numeru jednostki i komendy.
+W podfolderze *examples/* znajdują się przykładowe programy w Pythonie umożliwiające enkodowanie i dekodowanie numeru jednostki i komendy.

@@ -26,7 +26,7 @@ def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
 		raise ValueError("Input number can't be a negative number!")
 	# Convert string to list
 	as_list = list(transformed)
-	# Add 0's at the beginning, if 2nd parameter is given
+	# Add 0's at the beginning, if user specified amount of digits
 	if characters is not None:
 		# Check, is total digits less then minimum required
 		if characters < len(as_list):
@@ -34,7 +34,7 @@ def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
 			raise ValueError(f"Output length set by the user is too short! {len(as_list)} required, {characters} wanted")
 		# If everything is correct, expand list with 0's
 		as_list = ['0'] * (characters - len(as_list)) + as_list
-	# If first digit is a 0, replace it with 4 (decoder needs this transformation)
+	# If first digit is a 0, replace it with 4 (if add_leading_0 argument is True)
 	if as_list[0] == "0" and add_leading_0:
 		as_list[0] = "4"
 	# Replace repeated characters using Regex

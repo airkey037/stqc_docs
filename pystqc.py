@@ -92,12 +92,20 @@ class STQC:
                 raise ValueError(f"Given decimal number requires at least {len(as_base4)} characters, but {sequence_length} is wanted")
             as_base4 = ["0"] * (sequence_length - len(as_base4)) + as_base4
         return self(self.encode_4s(self, "".join(as_base4)))
-    def to_decimal(self) -> tuple[int, ...]:
+    def to_decimal(self) -> int | tuple[int, ...]:
         spaced = self.sequence.split(" ")
         numbers = []
         for no in spaced:
             numbers.append(int(self.decode_4s(no), 4))
-        return tuple(numbers)
+        if len(numbers) > 1:
+            return tuple(numbers)
+        return numbers[0]
+    def split(self) -> tuple[STQC, ...]:
+        spaced = self.sequence.split(" ")
+        objects = []
+        for no in spaced:
+            objects.append(STQC(no))
+        return tuple(objects)
     def generate_sound(self, filename:str=None, tone_length:float=0.1, break_length:float=0.2, lhead:float=0.0, rhead:float=0.0, sample_rate:int=48000):
         FREQS = {
             "0": 980,
@@ -224,17 +232,19 @@ class STQC:
 
 # Class to manage unit number and call type
 class UnitCall:
-    KASUJ = 0
-    ALARM = 1
-    PAGER = 2
-    TEST = 3
-    MAKRO = 4
-    OC_GR = 5
-    AI_OC1 = 6
-    AI_OC2 = 7
-    AI_OC3 = 8
-    FONIA = 9
-    reverse_map = {
+    CALLTYPES = {
+        "KASUJ": 0,
+        "ALARM": 1,
+        "PAGER": 2,
+        "TEST": 3,
+        "MAKRO": 4,
+        "OC.GR": 5,
+        "AI.OC1": 6,
+        "AI.OC2": 7,
+        "AI.OC3": 8,
+        "FONIA": 9
+    }
+    CALLTYPES_REVERSE = {
         0: "KASUJ",
         1: "ALARM",
         2: "PAGER",
@@ -249,7 +259,7 @@ class UnitCall:
     def __init__(self, unit:int, call_type:int):
         self.call_type = call_type
         try:
-            self.call_name = self.reverse_map[call_type]
+            self.call_name = self.CALLTYPES_REVERSE[call_type]
         except KeyError:
             raise IndexError("Invalid call type number!")
         self.unit = unit
@@ -258,6 +268,12 @@ class UnitCall:
     @classmethod
     def from_decimal(cls, decimal:int):
         return cls(decimal % 1000, decimal // 1000)
+    @classmethod
+    def from_stqc(cls, stqc:STQC):
+        dec = stqc.to_decimal()
+        if isinstance(dec, int):
+            return cls.from_decimal(dec)
+        raise TypeError(f"stqc parameter have to be int, not {type(dec)}")
 
 # Main function
 def main(args):

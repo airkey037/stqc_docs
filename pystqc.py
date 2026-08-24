@@ -355,6 +355,42 @@ class Decoder_v215:
     def __repr__(self):
         return f"decoder_v215=voivodeship={self.voivodeship}:powiat={self.powiat}"
 
+# Class that manages decoding and encoding area number with decoder version v2.16
+class Decoder_v216:
+    def __init__(self, area:int):
+        self.area = area
+        self.area1 = int(f"{area:04d}"[2:])
+        self.area2 = int(f"{area:04d}"[:2])
+        if self.area1 < 0 or self.area1 > 63:
+            raise ValueError(f"First part of an area number have to fit in range 0-63! ({self.area1} given)")
+        if self.area2 < 0 or self.area2 > 63:
+            raise ValueError(f"Second part of an area number have to fit in range 0-63! ({self.area2} given)")
+    @classmethod
+    def from_stqc(cls, stqc:STQC):
+        if len(stqc) != 7:
+            raise ValueError("STQC sequence have to be 7 tones long!")
+        if len(stqc.split()) != 1:
+            raise TypeError(f"The STQC object must contain only one sequence!")
+        sequence = str(stqc)
+        p1 = STQC(sequence[:4]).to_decimal()
+        p2 = STQC(sequence[4:]).to_decimal()
+        return cls(p1 * 100 + p2)
+    @classmethod
+    def from_decimal(cls, decimal:int):
+        return cls.from_stqc(STQC.from_decimal(decimal, 7))
+    def to_stqc(self) -> STQC:
+        p1 = STQC.from_decimal(self.area1, 4)
+        p2 = STQC.from_decimal(self.area2, 3)
+        return p1 + p2
+    def to_decimal(self) -> int:
+        return self.to_stqc().to_decimal()
+    def __eq__(self, other):
+        return self.area == other.area
+    def __str__(self):
+        return str(self.area)
+    def __repr__(self):
+        return f"decoder_v216=area={self.area}:area1={self.area1}:area2={self.area2}"
+
 # Main function
 def main(args):
     pass

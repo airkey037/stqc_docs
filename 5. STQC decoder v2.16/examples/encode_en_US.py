@@ -18,7 +18,7 @@ def base10_to_base4(base10:int)->str:
 	return "".join(numbers)
 
 # Function that outputs ready STQC sequence
-def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
+def genstqc(sq:int, characters:int=None)->str:
 	# Transform sequence from Base10 to Base4
 	transformed = base10_to_base4(sq)
 	# Check, was input number a negative number
@@ -34,13 +34,8 @@ def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
 			raise ValueError(f"Output length set by the user is too short! {len(as_list)} required, {characters} wanted")
 		# If everything is correct, expand list with 0's
 		as_list = ['0'] * (characters - len(as_list)) + as_list
-	# If first digit is a 0, replace it with 4 (if add_leading_0 argument is True)
-	if as_list[0] == "0" and add_leading_0:
-		as_list[0] = "4"
-	# Replace repeated characters using Regex
-	final = re.sub(r"([0-3])\1",r"\g<1>4","".join(as_list))
 	# Return the final result
-	return final
+	return "".join(as_list)
 
 # Get area number
 try:
@@ -68,7 +63,10 @@ if area2 < 0 or area2 > 63:
 
 # Calculate output sequence
 area1_sq = genstqc(area1, 4)
-area2_sq = genstqc(area2, 3, add_leading_0=False)
+area2_sq = genstqc(area2, 3)
+
+# Replace repeated characters using Regex
+final = re.sub(r"([0-3])\1",r"\g<1>4","0" + area1_sq + area2_sq)[1:]
 
 # Output the sequence
-print(area1_sq + area2_sq)
+print(final)

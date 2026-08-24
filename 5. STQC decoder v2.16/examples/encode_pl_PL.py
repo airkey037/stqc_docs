@@ -18,7 +18,7 @@ def base10_to_base4(base10:int)->str:
 	return "".join(numbers)
 
 # Funkcja, która zwraca gotową sekwencję STQC
-def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
+def genstqc(sq:int, characters:int=None)->str:
 	# Zamień sekwencję wejściową z Base10 do Base4
 	transformed = base10_to_base4(sq)
 	# Sprawdź, czy jest to liczba ujemna
@@ -34,13 +34,8 @@ def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
 			raise ValueError(f"Output length set by the user is too short! {len(as_list)} required, {characters} wanted")
 		# Jeżeli wszystko jest poprawne, dodaj zera na początku
 		as_list = ['0'] * (characters - len(as_list)) + as_list
-	# Jeżeli pierwsza cyfra to 0, zamien ją na 4 (gdy podany argument to True)
-	if as_list[0] == "0" and add_leading_0:
-		as_list[0] = "4"
-	# Używając wyrażeń regularnych zamień powtarzające się znaki
-	final = re.sub(r"([0-3])\1",r"\g<1>4","".join(as_list))
 	# Zwróć wynik
-	return final
+	return "".join(as_list)
 
 # Pobierz numer obszaru
 try:
@@ -68,7 +63,10 @@ if area2 < 0 or area2 > 63:
 
 # Policz sekwencję wyjściową
 area1_sq = genstqc(area1, 4)
-area2_sq = genstqc(area2, 3, add_leading_0=False)
+area2_sq = genstqc(area2, 3)
+
+# Zamień powtarzające się znaki na 4 używając wyrażeń regularnych
+final = re.sub(r"([0-3])\1",r"\g<1>4","0" + area1_sq + area2_sq)[1:]
 
 # Wyświetl wynik
-print(area1_sq + area2_sq)
+print(final)

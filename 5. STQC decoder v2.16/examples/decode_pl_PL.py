@@ -39,4 +39,4 @@ except ValueError:
 	exit(2)
 
 # Wyświetl wynik
-print(f"{area1}{area2}")
+print(int(f"{area1}{area2:02d}"))

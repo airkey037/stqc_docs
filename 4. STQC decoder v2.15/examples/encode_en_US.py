@@ -18,7 +18,7 @@ def base10_to_base4(base10:int)->str:
 	return "".join(numbers)
 
 # Function that outputs ready STQC sequence
-def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
+def genstqc(sq:int, characters:int=None)->str:
 	# Transform sequence from Base10 to Base4
 	transformed = base10_to_base4(sq)
 	# Check, was input number a negative number
@@ -34,13 +34,8 @@ def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
 			raise ValueError(f"Output length set by the user is too short! {len(as_list)} required, {characters} wanted")
 		# If everything is correct, expand list with 0's
 		as_list = ['0'] * (characters - len(as_list)) + as_list
-	# If first digit is a 0, replace it with 4 (if add_leading_0 argument is True)
-	if as_list[0] == "0" and add_leading_0:
-		as_list[0] = "4"
-	# Replace repeated characters using Regex
-	final = re.sub(r"([0-3])\1",r"\g<1>4","".join(as_list))
 	# Return the final result
-	return final
+	return "".join(as_list)
 
 # Get voivodeship and powiat number; if not presented, display help message
 try:
@@ -65,7 +60,10 @@ if powiat < 0 or powiat > 63:
 
 # Generate sequence from voivodeship ID and powiat ID
 voivodeship_sq = genstqc(voivodeship, 4)
-powiat_sq = genstqc(powiat, 3, add_leading_0=False)
+powiat_sq = genstqc(powiat, 3)
+
+# Replace repeated characters using Regex
+final = re.sub(r"([0-3])\1",r"\g<1>4","0"+voivodeship_sq+powiat_sq)[1:]
 
 # Print the result
-print(voivodeship_sq + powiat_sq)
+print(final)

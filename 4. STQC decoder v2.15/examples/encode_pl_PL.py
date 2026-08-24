@@ -18,7 +18,7 @@ def base10_to_base4(base10:int)->str:
 	return "".join(numbers)
 
 # Funkcja, która zwraca gotową sekwencję STQC
-def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
+def genstqc(sq:int, characters:int=None)->str:
 	# Zamień sekwencję wejściową z Base10 do Base4
 	transformed = base10_to_base4(sq)
 	# Sprawdź, czy jest to liczba ujemna
@@ -34,13 +34,8 @@ def genstqc(sq:int, characters:int=None,add_leading_0=True)->str:
 			raise ValueError(f"Output length set by the user is too short! {len(as_list)} required, {characters} wanted")
 		# Jeżeli wszystko jest poprawne, dodaj zera na początku
 		as_list = ['0'] * (characters - len(as_list)) + as_list
-	# Jeżeli pierwsza cyfra to 0, zamien ją na 4 (gdy podany argument to True)
-	if as_list[0] == "0" and add_leading_0:
-		as_list[0] = "4"
-	# Używając wyrażeń regularnych zamień powtarzające się znaki
-	final = re.sub(r"([0-3])\1",r"\g<1>4","".join(as_list))
 	# Zwróć wynik
-	return final
+	return "".join(as_list)
 
 # Odczytaj numer powiatu i województwa
 try:
@@ -65,7 +60,10 @@ if powiat < 0 or powiat > 63:
 
 # Wygeneruj sekwencję województwa i powiatu
 voivodeship_sq = genstqc(voivodeship, 4)
-powiat_sq = genstqc(powiat, 3, add_leading_0=False)
+powiat_sq = genstqc(powiat, 3)
+
+# Używając wyrażeń regularnych zamień powtarzające się znaki
+final = re.sub(r"([0-3])\1",r"\g<1>4","0"+voivodeship_sq+powiat_sq)[1:]
 
 # Wyświetl wynik
-print(voivodeship_sq + powiat_sq)
+print(final)

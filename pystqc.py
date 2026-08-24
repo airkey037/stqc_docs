@@ -75,6 +75,31 @@ class STQC:
             replaced = re.sub(r"([0-3])4",r"\1\1","0"+no)
             numbers.append(int(replaced, 4))
         return tuple(numbers)
+    def __str__(self):
+        return self.sequence
+    def __repr__(self):
+        return f"STQC_Sequence({self.sequence})"
+    def __len__(self):
+        return len(self.sequence)
+    def __eq__(self, other):
+        return self.sequence == other.sequence
+    def __add__(self, other):
+        if isinstance(other, STQC):
+            return STQC(self.sequence + " " + other.sequence)
+        if isinstance(other, int):
+            reprsq = STQC.from_decimal(other).sequence
+            return STQC(self.sequence + " " + reprsq)
+        return NotImplemented
+    def __radd__(self, other):
+        if isinstance(other, STQC):
+            return STQC(other.sequence + " " + self.sequence)
+        if isinstance(other, int):
+            reprsq = STQC.from_decimal(other).sequence
+            return STQC(reprsq + " " + self.sequence)
+        return NotImplemented
+    def __hash__(self):
+        return self.sequence
+
 # Main function
 def main(args):
     pass

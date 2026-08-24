@@ -22,10 +22,10 @@ Projekt jest podzielony na kilka folderów w celu łatwiejszej nawigacji:
 4. **STQC decoder v2.15** - w tym folderze znajdują się informacje, w jaki sposób [Dekoder STQC Bartka (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) wyznacza numer województwa oraz powiatu.
 5. **STQC decoder v2.16** - w tym folderze znajdują się informacje, w jaki sposób [Dekoder STQC Bartka (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) wyznacza numer obszaru.
 
-Program **pystqc.py** to pełny i kompletny program pozwalający na dekodowanie, transkodowanie, generowanie oraz enkodowanie wszystkich powyższych formatów. Aby dowiedzieć się więcej, uruchom go z opcją *-help*:
+Program **pystqc.py** to pełny i kompletny program pozwalający na dekodowanie, transkodowanie, generowanie oraz enkodowanie wszystkich powyższych formatów. Aby dowiedzieć się więcej, uruchom go z opcją *--help*:
 
 ```bash
-python3 pystqc.py -help
+python3 pystqc.py --help
 ```
 
 **INFO:** Program jeszcze powstaje (dlatego znajduje się w osobnym branchu). Gdy zostanie ukończony, ta wiadomość zniknie, a branch zostanie scalony do main.
@@ -57,7 +57,7 @@ Project is divided into folders for easier navigation:
 **pystqc.py** program is a full and powerful utility to encode, decode, transcode and generate all formats mentioned above. If you want to learn more, run:
 
 ```bash
-python3 pystqc.py -help
+python3 pystqc.py --help
 ```
 
 **INFO:** Program isn't finished yet (that's why it is in a different branch). When it will be finished, this note will disappear, and this branch will be merged back to main.

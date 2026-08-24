@@ -14,7 +14,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# For more info, run program with -license option
+# For more info, run program with --license option
 
 # Import required libraries
 from argparse import ArgumentParser, RawTextHelpFormatter
@@ -44,8 +44,8 @@ def main(args):
 # Start the main() function only if program was started directly, not imported
 if __name__ == "__main__":
     parser = ArgumentParser(description="A powerful utility to encode, decode, transcode and generate STQC sequences compatible with Bartek's STQC decoder v2.10, v2.15 and v2.16",epilog=GPL_NOTE,formatter_class=RawTextHelpFormatter)
-    parser.add_argument("-version",help="Display program version",action="version",version=__version__)
-    parser.add_argument("-credits",help="Display program authors",action="version",version=AUTHORS)
-    parser.add_argument("-license",help="Display program license (GNU GPL 3.0)",action="version",version=GPL3_0)
+    parser.add_argument("-v","--version",help="Display program version",action="version",version=__version__)
+    parser.add_argument("-c","--credits",help="Display program authors",action="version",version=AUTHORS)
+    parser.add_argument("-l","--license",help="Display program license (GNU GPL 3.0)",action="version",version=GPL3_0)
     args = parser.parse_args()
     main(args)

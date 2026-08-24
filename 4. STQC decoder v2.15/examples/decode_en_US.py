@@ -30,8 +30,13 @@ vvdsq = to_decode[:4]
 pwtsq = to_decode[4:]
 
 # Decode voivodeship and powiat
-vvd = stqc_to_base10(vvdsq)
-pwt = stqc_to_base10(pwtsq)
+try:
+    vvd = stqc_to_base10(vvdsq)
+    pwt = stqc_to_base10(pwtsq)
+except ValueError:
+	# Invalid sequence
+	print("Invalid sequence!")
+	exit(2)
 
 # Print the results
 print(f"Voivodeship: {vvd}\nPowiat: {pwt}")

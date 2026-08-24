@@ -74,6 +74,10 @@ class STQC:
             except IndexError:
                 pass
         return True, None
+    def encode_4s(self, sequence:str) -> str:
+        return sub(r"([0-3])\1",r"\g<1>4","0" + sequence)[1:]
+    def decode_4s(self, sequence:str) -> str:
+        return sub(r"([0-3])4",r"\1\1","0" + sequence)[1:]
     def __init__(self, sequence:str):
         self.position = 0
         self.sequence = sequence
@@ -81,23 +85,18 @@ class STQC:
         if not valid:
             raise STQCError(err)
     @classmethod
-    def from_decimal(cls, decimal:int, sequence_length:int=None):
+    def from_decimal(self, decimal:int, sequence_length:int=None):
         as_base4 = list(base10_to_base4(decimal))
         if sequence_length is not None:
             if sequence_length < len(as_base4):
                 raise ValueError(f"Given decimal number requires at least {len(as_base4)} characters, but {sequence_length} is wanted")
             as_base4 = ["0"] * (sequence_length - len(as_base4)) + as_base4
-        sequence = sub(r"([0-3])\1",r"\g<1>4","0" + "".join(as_base4))[1:]
-        return cls(sequence)
-    @classmethod
-    def space(cls):
-        return cls(" ")
+        return self(self.encode_4s(self, "".join(as_base4)))
     def to_decimal(self) -> tuple[int, ...]:
         spaced = self.sequence.split(" ")
         numbers = []
         for no in spaced:
-            replaced = sub(r"([0-3])4",r"\1\1","0"+no)
-            numbers.append(int(replaced, 4))
+            numbers.append(int(self.decode_4s(no), 4))
         return tuple(numbers)
     def generate_sound(self, filename:str=None, tone_length:float=0.1, break_length:float=0.2, lhead:float=0.0, rhead:float=0.0, sample_rate:int=48000):
         FREQS = {
@@ -168,20 +167,97 @@ class STQC:
         return self.sequence == other.sequence
     def __add__(self, other):
         if isinstance(other, STQC):
-            return STQC(self.sequence + other.sequence)
+            sqd1 = self.decode_4s(self.sequence)
+            sqd2 = self.decode_4s(other.sequence)
+            return STQC(self.encode_4s(sqd1 + sqd2))
         if isinstance(other, int):
-            reprsq = STQC.from_decimal(other).sequence
-            return STQC(self.sequence + reprsq)
+            sqd1 = self.decode_4s(self.sequence)
+            sqd2 = self.decode_4s(STQC.from_decimal(other).sequence)
+            return STQC(self.encode_4s(sqd1 + sqd2))
         return NotImplemented
     def __radd__(self, other):
         if isinstance(other, STQC):
-            return STQC(other.sequence + self.sequence)
+            sqd1 = self.decode_4s(self.sequence)
+            sqd2 = self.decode_4s(other.sequence)
+            return STQC(self.encode_4s(sqd2 + sqd1))
+        if isinstance(other, int):
+            sqd1 = self.decode_4s(self.sequence)
+            sqd2 = self.decode_4s(STQC.from_decimal(other).sequence)
+            return STQC(self.encode_4s(sqd2 + sqd1))
+        return NotImplemented
+    def __iadd__(self, other):
+        if isinstance(other, STQC):
+            sqd1 = self.decode_4s(self.sequence)
+            sqd2 = self.decode_4s(other.sequence)
+            self.sequence = self.encode_4s(sqd1 + sqd2)
+            return self
+        if isinstance(other, int):
+            sqd1 = self.decode_4s(self.sequence)
+            sqd2 = self.decode_4s(STQC.from_decimal(other).sequence)
+            self.sequence = self.encode_4s(sqd1 + sqd2)
+            return self
+        return NotImplemented
+    def __truediv__(self, other):
+        if isinstance(other, STQC):
+            return STQC(self.sequence + " " + other.sequence)
         if isinstance(other, int):
             reprsq = STQC.from_decimal(other).sequence
-            return STQC(reprsq + self.sequence)
+            return STQC(self.sequence + " " + reprsq)
+        return NotImplemented
+    def __rtruediv__(self, other):
+        if isinstance(other, STQC):
+            return STQC(other.sequence + " " + self.sequence)
+        if isinstance(other, int):
+            reprsq = STQC.from_decimal(other).sequence
+            return STQC(reprsq + " " + self.sequence)
+        return NotImplemented
+    def __itruediv__(self, other):
+        if isinstance(other, STQC):
+            self.sequence = self.sequence + " " + other.sequence
+            return self
+        if isinstance(other, int):
+            self.sequence = self.sequence + " " + STQC.from_decimal(other).sequence
+            return self
         return NotImplemented
     def __hash__(self):
         return self.sequence
+
+# Class to manage unit number and call type
+class UnitCall:
+    KASUJ = 0
+    ALARM = 1
+    PAGER = 2
+    TEST = 3
+    MAKRO = 4
+    OC_GR = 5
+    AI_OC1 = 6
+    AI_OC2 = 7
+    AI_OC3 = 8
+    FONIA = 9
+    reverse_map = {
+        0: "KASUJ",
+        1: "ALARM",
+        2: "PAGER",
+        3: "TEST",
+        4: "MAKRO",
+        5: "OC.GR",
+        6: "AI.OC1",
+        7: "AI.OC2",
+        8: "AI.OC3",
+        9: "FONIA"
+    }
+    def __init__(self, unit:int, call_type:int):
+        self.call_type = call_type
+        try:
+            self.call_name = self.reverse_map[call_type]
+        except KeyError:
+            raise IndexError("Invalid call type number!")
+        self.unit = unit
+        if unit < 0 or unit > 999:
+            raise ValueError("Unit have to fit in range 0-999!")
+    @classmethod
+    def from_decimal(cls, decimal:int):
+        return cls(decimal % 1000, decimal // 1000)
 
 # Main function
 def main(args):

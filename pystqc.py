@@ -57,8 +57,8 @@ class STQC:
         self.sequence = sequence
         ALLOWED_CHARS = ("0", "1", "2", "3", "4")
         for chr in sequence:
-            if chr not in ALLOWED_CHARS:
-                raise ValueError(f"{chr} is an invalid character! Allowed: {", ".join(ALLOWED_CHARS)}")
+            if chr not in ALLOWED_CHARS and chr != " ":
+                raise ValueError(f"{chr} is an invalid character! Allowed: {", ".join(ALLOWED_CHARS)}, SPACE (break)")
     @classmethod
     def from_decimal(cls, decimal:int, sequence_length:int=None):
         as_base4 = list(base10_to_base4(decimal))
@@ -68,6 +68,13 @@ class STQC:
             as_base4 = ["0"] * (sequence_length - len(as_base4)) + as_base4
         sequence = re.sub(r"([0-3])\1",r"\g<1>4","0" + "".join(as_base4))[1:]
         return cls(sequence)
+    def to_decimal(self) -> tuple[int, ...]:
+        spaced = self.sequence.split(" ")
+        numbers = []
+        for no in spaced:
+            replaced = re.sub(r"([0-3])4",r"\1\1","0"+no)
+            numbers.append(int(replaced, 4))
+        return tuple(numbers)
 # Main function
 def main(args):
     pass

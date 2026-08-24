@@ -1,5 +1,3 @@
-**INFO:** This documentation isn't finished yet. When it will be finished, this note will disapear / Dokumentacja jeszcze nie jest dokończona. Gdy ją dokończę, ta informacja zniknie
-
 # STQC Documentation
 
 ***NOTE:** English version below*
@@ -22,6 +20,7 @@ Projekt jest podzielony na kilka folderów w celu łatwiejszej nawigacji:
 2. **STQC decoder - entry** - wprowadzenie do metod enkodowania i dekodowania informacji przekazywanych syrenom alarmowym. W tym folderze znajdziesz również metodę, której używa [Dekoder STQC Bartka (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) w wersjach 2.10, 2.15 i 2.16 do ustalenia numeru jednostki i komendy. Są one wszystkie wrzucone do jednego folderu, ponieważ są takie same dla każdej wersji, i zwyczajnie nie byłoby sensu opisywać tego samego w trzech różnych folderach.
 3. **STQC decoder v2.10** - w tym folderze znajdują się (krótkie) informacje, jak [Dekoder STQC Bartka (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) w wersji 2.10 wyznacza numer powiatu.
 4. **STQC decoder v2.15** - w tym folderze znajdują się informacje, w jaki sposób [Dekoder STQC Bartka (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) wyznacza numer województwa oraz powiatu.
+5. **STQC decoder v2.16** - w tym folderze znajdują się informacje, w jaki sposób [Dekoder STQC Bartka (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) wyznacza numer obszaru.
 
 ---
 
@@ -43,5 +42,6 @@ Project is divided into folders for easier navigation:
 2. **STQC decoder - entry** - methods of encoding and decoding informations used to control alarm sirens. You can also find documented method, that [Bartek's STQC decoder (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) in version 2.10, 2.15 and 2.16 is using to determine unit number and command. I put them into one folder, because they are the same for all versions, so there is no need to put the same stuff in 3 folders.
 3. **STQC decoder v2.10** - in this folder you can find (short) documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) in version 2.10 is decoding "powiat*" number.
 4. **STQC decoder v2.15** - in this folder you can find documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) is decoding voivodeship and "powiat*" number.
+5. **STQC decoder v2.16** - in this folder you can find documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) is decoding area number.
 
 \* I can't translate "powiat" to English, because I don't know any good word that matches exactly its meaning. Generally Voivodeships in Poland are divided into smaller administration regions called "powiats".

@@ -319,6 +319,42 @@ class Decoder_v210:
     def __repr__(self):
         return f"decoder_v210=powiat={self.powiat}"
 
+# Class that manages decoding and encoding voivodeship and powiat number with decoder version v2.15
+class Decoder_v215:
+    STQC_LENGTH = 7
+    def __init__(self, voivodeship:int, powiat:int):
+        self.voivodeship = voivodeship
+        self.powiat = powiat
+        if voivodeship < 0 or voivodeship > 63:
+            raise ValueError("voivodeship number have to fit in range 0-63!")
+        if powiat < 0 or powiat > 63:
+            raise ValueError("powiat number have to fit in range 0-63!")
+    @classmethod
+    def from_stqc(cls, stqc:STQC):
+        if len(stqc) != cls.STQC_LENGTH:
+            raise ValueError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
+        if len(stqc.split()) != 1:
+            raise TypeError(f"The STQC object must contain only one sequence!")
+        sequence = str(stqc)
+        vvd = STQC(sequence[:4]).to_decimal()
+        pwt = STQC(sequence[4:]).to_decimal()
+        return cls(vvd, pwt)
+    @classmethod
+    def from_decimal(cls, decimal:int):
+        return cls.from_stqc(STQC.from_decimal(decimal, cls.STQC_LENGTH))
+    def to_stqc(self) -> STQC:
+        vvdsq = STQC.from_decimal(self.voivodeship, 4)
+        pwtsq = STQC.from_decimal(self.powiat, 3)
+        return vvdsq + pwtsq
+    def to_decimal(self) -> int:
+        return self.to_stqc().to_decimal()
+    def __eq__(self, other):
+        return self.voivodeship == other.voivodeship and self.powiat == other.powiat
+    def __str__(self):
+        return f"{self.voivodeship}:{self.powiat}"
+    def __repr__(self):
+        return f"decoder_v215=voivodeship={self.voivodeship}:powiat={self.powiat}"
+
 # Main function
 def main(args):
     pass

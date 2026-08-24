@@ -18,8 +18,11 @@
 
 # Import required libraries
 from argparse import ArgumentParser, RawTextHelpFormatter
-from subprocess import check_output, DEVNULL, CalledProcessError
-import re
+from subprocess import check_output, DEVNULL, CalledProcessError, Popen, PIPE
+from math import sin, pi
+from os import remove
+from re import sub
+from time import sleep
 
 # Define some legal info
 GPL_NOTE="This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with this program.  If not, see <https://www.gnu.org/licenses/>."
@@ -53,17 +56,21 @@ def base10_to_base4(base10:int)->str:
 
 # Custom exception class for STQC format errors
 class STQCError(ValueError): pass
+# Custom exception for any FFmpeg errors
+class FFmpegError(SystemError): pass
 # STQC class that manages raw STQC sequences
 class STQC:
-    def validate(self, sequence):
+    def validate(self, sequence:str):
         ALLOWED_CHARS = ("0", "1", "2", "3", "4")
         for it, chr in enumerate(sequence):
             if chr not in ALLOWED_CHARS and chr != " ":
                 return False, f"{chr} is an invalid character! Allowed: {", ".join(ALLOWED_CHARS)}, SPACE (break)"
             try:
-                before = sequence[it - 1]
-                if chr == before:
-                    return False, f"{chr} is repeating twice and wasn't replaced with 4!"
+                index = it - 1
+                if index >= 0:
+                    before = sequence[index]
+                    if chr == before:
+                        return False, f"{chr} is repeating twice and wasn't replaced with 4!"
             except IndexError:
                 pass
         return True, None
@@ -79,15 +86,61 @@ class STQC:
             if sequence_length < len(as_base4):
                 raise ValueError(f"Given decimal number requires at least {len(as_base4)} characters, but {sequence_length} is wanted")
             as_base4 = ["0"] * (sequence_length - len(as_base4)) + as_base4
-        sequence = re.sub(r"([0-3])\1",r"\g<1>4","0" + "".join(as_base4))[1:]
+        sequence = sub(r"([0-3])\1",r"\g<1>4","0" + "".join(as_base4))[1:]
         return cls(sequence)
     def to_decimal(self) -> tuple[int, ...]:
         spaced = self.sequence.split(" ")
         numbers = []
         for no in spaced:
-            replaced = re.sub(r"([0-3])4",r"\1\1","0"+no)
+            replaced = sub(r"([0-3])4",r"\1\1","0"+no)
             numbers.append(int(replaced, 4))
         return tuple(numbers)
+    def generate_sound(self, filename:str=None, tone_length:float=0.1, break_length:float=0.2, lhead:float=0.0, rhead:float=0.0, sample_rate:int=48000):
+        FREQS = {
+            "0": 980,
+            "1": 1197,
+            "2": 1446,
+            "3": 1795,
+            "4": 2105
+        }
+        valid, err = self.validate(self.sequence)
+        if not valid:
+            raise STQCError(err)
+        steps = []
+        if lhead > 0:
+            steps.append({"freq":None,"duration":int(lhead * sample_rate)})
+        for tone in self.sequence:
+            if tone == " ":
+                steps.append({"freq":None,"duration":int(break_length * sample_rate)})
+            else:
+                steps.append({"freq":FREQS[tone],"duration":int(tone_length * sample_rate)})
+        if rhead > 0:
+            steps.append({"freq":None,"duration":int(rhead * sample_rate)})
+        if not filename:
+            filename = f"sequence_{self.sequence.replace(" ","_").strip("_")}.mp3"
+        try:
+            ffmpeg = Popen(["ffmpeg","-loglevel","quiet","-y","-f","s16le","-ac","1","-ar",str(sample_rate),"-i","-","-c:a","libmp3lame","-ac","1","-ar",str(sample_rate),"-b:a","64k","-metadata",f"title={self.sequence}","-metadata","artist=PySTQC","-f","mp3",filename],stdin=PIPE)
+        except FileNotFoundError:
+            raise FFmpegError("FFmpeg not installed or not in your system PATH!")
+        for toneinfo in steps:
+            pcm = bytearray()
+            if toneinfo["freq"] is None:
+                pcm.extend(bytearray(toneinfo["duration"]*2))
+            else:
+                for sn in range(toneinfo["duration"]):
+                    sample = sin(2 * pi * toneinfo["freq"] * sn / sample_rate)
+                    value = int(sample * 30000)
+                    pcm.extend(value.to_bytes(2, byteorder="little", signed=True))
+            if ffmpeg.poll() is not None:
+                remove(filename)
+                raise FFmpegError(f"FFmpeg finished unexpected with return code {ffmpeg.returncode}")
+            try:
+                ffmpeg.stdin.write(pcm)
+            except BrokenPipeError:
+                remove(filename)
+                raise FFmpegError(f"FFmpeg died during writing samples to stdin! Exit code: {ffmpeg.returncode}")
+        ffmpeg.stdin.close()
+        ffmpeg.wait()
     def __str__(self):
         return self.sequence
     def __bool__(self):

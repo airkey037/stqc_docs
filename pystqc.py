@@ -257,7 +257,7 @@ class UnitCall:
         9: "FONIA"
     }
     def __init__(self, unit:int, call_type:int):
-        self.call_type = call_type
+        self.call = call_type
         try:
             self.call_name = self.CALLTYPES_REVERSE[call_type]
         except KeyError:
@@ -273,7 +273,11 @@ class UnitCall:
         dec = stqc.to_decimal()
         if isinstance(dec, int):
             return cls.from_decimal(dec)
-        raise TypeError(f"stqc parameter have to be int, not {type(dec)}")
+        raise TypeError(f"stqc parameter have to be int, not {dec.__class__.__name__}")
+    def to_decimal(self) -> int:
+        return self.call * 1000 + self.unit
+    def to_stqc(self) -> STQC:
+        return STQC.from_decimal(self.to_decimal(), 8)
 
 # Main function
 def main(args):

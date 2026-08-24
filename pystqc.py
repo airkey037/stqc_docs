@@ -75,6 +75,7 @@ class STQC:
                 pass
         return True, None
     def __init__(self, sequence:str):
+        self.position = 0
         self.sequence = sequence
         valid, err = self.validate(sequence)
         if not valid:
@@ -147,7 +148,17 @@ class STQC:
         valid, _ = self.validate(self.sequence)
         return valid
     def __repr__(self):
-        return f"STQC_Sequence({self.sequence})"
+        return f"STQC_Sequence({self.sequence}).ln={len(self.sequence)} iterstate={self.position}"
+    def __iter__(self):
+        self.position = 0
+        return self
+    def __next__(self):
+        if self.position < len(self.sequence):
+            result = self.sequence[self.position]
+            self.position += 1
+            return result
+        else:
+            raise StopIteration
     def __len__(self):
         return len(self.sequence)
     def __eq__(self, other):

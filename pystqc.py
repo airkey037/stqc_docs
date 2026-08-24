@@ -89,6 +89,9 @@ class STQC:
             as_base4 = ["0"] * (sequence_length - len(as_base4)) + as_base4
         sequence = sub(r"([0-3])\1",r"\g<1>4","0" + "".join(as_base4))[1:]
         return cls(sequence)
+    @classmethod
+    def space(cls):
+        return cls(" ")
     def to_decimal(self) -> tuple[int, ...]:
         spaced = self.sequence.split(" ")
         numbers = []
@@ -165,17 +168,17 @@ class STQC:
         return self.sequence == other.sequence
     def __add__(self, other):
         if isinstance(other, STQC):
-            return STQC(self.sequence + " " + other.sequence)
+            return STQC(self.sequence + other.sequence)
         if isinstance(other, int):
             reprsq = STQC.from_decimal(other).sequence
-            return STQC(self.sequence + " " + reprsq)
+            return STQC(self.sequence + reprsq)
         return NotImplemented
     def __radd__(self, other):
         if isinstance(other, STQC):
-            return STQC(other.sequence + " " + self.sequence)
+            return STQC(other.sequence + self.sequence)
         if isinstance(other, int):
             reprsq = STQC.from_decimal(other).sequence
-            return STQC(reprsq + " " + self.sequence)
+            return STQC(reprsq + self.sequence)
         return NotImplemented
     def __hash__(self):
         return self.sequence

@@ -51,14 +51,27 @@ def base10_to_base4(base10:int)->str:
 		numbers.append(str(int(d1+d2,2)))
 	return "".join(numbers)
 
+# Custom exception class for STQC format errors
+class STQCError(ValueError): pass
 # STQC class that manages raw STQC sequences
 class STQC:
+    def validate(self, sequence):
+        ALLOWED_CHARS = ("0", "1", "2", "3", "4")
+        for it, chr in enumerate(sequence):
+            if chr not in ALLOWED_CHARS and chr != " ":
+                return False, f"{chr} is an invalid character! Allowed: {", ".join(ALLOWED_CHARS)}, SPACE (break)"
+            try:
+                before = sequence[it - 1]
+                if chr == before:
+                    return False, f"{chr} is repeating twice and wasn't replaced with 4!"
+            except IndexError:
+                pass
+        return True, None
     def __init__(self, sequence:str):
         self.sequence = sequence
-        ALLOWED_CHARS = ("0", "1", "2", "3", "4")
-        for chr in sequence:
-            if chr not in ALLOWED_CHARS and chr != " ":
-                raise ValueError(f"{chr} is an invalid character! Allowed: {", ".join(ALLOWED_CHARS)}, SPACE (break)")
+        valid, err = self.validate(sequence)
+        if not valid:
+            raise STQCError(err)
     @classmethod
     def from_decimal(cls, decimal:int, sequence_length:int=None):
         as_base4 = list(base10_to_base4(decimal))
@@ -77,6 +90,9 @@ class STQC:
         return tuple(numbers)
     def __str__(self):
         return self.sequence
+    def __bool__(self):
+        valid, _ = self.validate(self.sequence)
+        return valid
     def __repr__(self):
         return f"STQC_Sequence({self.sequence})"
     def __len__(self):

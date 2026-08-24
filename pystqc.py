@@ -19,6 +19,7 @@
 # Import required libraries
 from argparse import ArgumentParser, RawTextHelpFormatter
 from subprocess import check_output, DEVNULL, CalledProcessError
+import re
 
 # Define some legal info
 GPL_NOTE="This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with this program.  If not, see <https://www.gnu.org/licenses/>."
@@ -37,6 +38,36 @@ def get_version():
 # Get program version
 __version__ = get_version()
 
+# Function that converts from Base10 to Base4
+def base10_to_base4(base10:int)->str:
+	if base10 < 0:
+		return None
+	binsgn = bin(base10)[2:]
+	if len(binsgn) % 2 != 0:
+		binsgn = "0" + binsgn
+	it = iter(binsgn)
+	numbers = []
+	for d1, d2 in zip(it, it):
+		numbers.append(str(int(d1+d2,2)))
+	return "".join(numbers)
+
+# STQC class that manages raw STQC sequences
+class STQC:
+    def __init__(self, sequence:str):
+        self.sequence = sequence
+        ALLOWED_CHARS = ("0", "1", "2", "3", "4")
+        for chr in sequence:
+            if chr not in ALLOWED_CHARS:
+                raise ValueError(f"{chr} is an invalid character! Allowed: {", ".join(ALLOWED_CHARS)}")
+    @classmethod
+    def from_decimal(cls, decimal:int, sequence_length:int=None):
+        as_base4 = list(base10_to_base4(decimal))
+        if sequence_length is not None:
+            if sequence_length < len(as_base4):
+                raise ValueError(f"Given decimal number requires at least {len(as_base4)} characters, but {sequence_length} is wanted")
+            as_base4 = ["0"] * (sequence_length - len(as_base4)) + as_base4
+        sequence = re.sub(r"([0-3])\1",r"\g<1>4","0" + "".join(as_base4))[1:]
+        return cls(sequence)
 # Main function
 def main(args):
     pass

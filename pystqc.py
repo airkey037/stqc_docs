@@ -158,7 +158,7 @@ class STQC:
         valid, _ = self.validate(self.sequence)
         return valid
     def __repr__(self):
-        return f"STQC_Sequence({self.sequence}).ln={len(self.sequence)} iterstate={self.position}"
+        return f"stqc_sequence=seq={self.sequence}:ln={len(self.sequence)}:iterstate={self.position}"
     def __iter__(self):
         self.position = 0
         return self
@@ -256,6 +256,7 @@ class UnitCall:
         8: "AI.OC3",
         9: "FONIA"
     }
+    STQC_LENGTH = 8
     def __init__(self, unit:int, call_type:int):
         self.call = call_type
         try:
@@ -270,14 +271,53 @@ class UnitCall:
         return cls(decimal % 1000, decimal // 1000)
     @classmethod
     def from_stqc(cls, stqc:STQC):
+        if len(stqc) != cls.STQC_LENGTH:
+            raise ValueError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
         dec = stqc.to_decimal()
         if isinstance(dec, int):
             return cls.from_decimal(dec)
-        raise TypeError(f"stqc parameter have to be int, not {dec.__class__.__name__}")
+        else:
+            raise TypeError("The STQC object must contain only one sequence!")
     def to_decimal(self) -> int:
         return self.call * 1000 + self.unit
     def to_stqc(self) -> STQC:
-        return STQC.from_decimal(self.to_decimal(), 8)
+        return STQC.from_decimal(self.to_decimal(), self.STQC_LENGTH)
+    def __eq__(self, other):
+        return self.unit == other.unit and self.call == other.call
+    def __str__(self):
+        return f"{self.call_name} {self.unit}"
+    def __repr__(self):
+        return f"unitcall=unit={self.unit}:call={self.call}:call_name={self.call_name}"
+
+# Class that manages decoding and encoding powiat number with decoder version v2.10
+class Decoder_v210:
+    STQC_LENGTH = 7
+    def __init__(self, powiat:int):
+        self.powiat = powiat
+        if powiat < 0 or powiat > 4095:
+            raise ValueError("powiat parameter have to fit in range 0-4095")
+    @classmethod
+    def from_decimal(cls, decimal:int):
+        return cls(decimal)
+    @classmethod
+    def from_stqc(cls, stqc:STQC):
+        if len(stqc) != cls.STQC_LENGTH:
+            raise ValueError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
+        dec = stqc.to_decimal()
+        if isinstance(dec, int):
+            return cls.from_decimal(dec)
+        else:
+            raise TypeError(f"The STQC object must contain only one sequence!")
+    def to_decimal(self) -> int:
+        return self.powiat
+    def to_stqc(self) -> STQC:
+        return STQC.from_decimal(self.powiat, self.STQC_LENGTH)
+    def __eq__(self, other):
+        return self.powiat == other.powiat
+    def __str__(self):
+        return str(self.powiat)
+    def __repr__(self):
+        return f"decoder_v210=powiat={self.powiat}"
 
 # Main function
 def main(args):

@@ -18,7 +18,7 @@
 
 # Import required libraries
 from argparse import ArgumentParser, RawTextHelpFormatter
-from subprocess import check_output, DEVNULL, CalledProcessError, Popen, PIPE
+from subprocess import check_output, DEVNULL, CalledProcessError, Popen, PIPE, STDOUT
 from math import sin, pi
 from os import remove
 from re import sub
@@ -57,7 +57,11 @@ def base10_to_base4(base10:int)->str:
 # Custom exception class for STQC format errors
 class STQCError(ValueError): pass
 # Custom exception for any FFmpeg errors
-class FFmpegError(SystemError): pass
+class FFmpegError(SystemError):
+    def __init__(self, message, returncode=0, ffmpeg_log=None):
+        super().__init__(message)
+        self.returncode = returncode
+        self.ffmpeg_log = ffmpeg_log
 # STQC class that manages raw STQC sequences
 class STQC:
     def validate(self, sequence:str):
@@ -130,9 +134,9 @@ class STQC:
         if not filename:
             filename = f"sequence_{self.sequence.replace(" ","_").strip("_")}.mp3"
         try:
-            ffmpeg = Popen(["ffmpeg","-protocol_whitelist","file,pipe,fd","-loglevel","quiet","-y","-f","s16le","-ac","1","-ar",str(sample_rate),"-i","-","-c:a","libmp3lame","-ac","1","-ar",str(sample_rate),"-b:a","64k","-metadata",f"title={self.sequence}","-metadata","artist=PySTQC","-f","mp3",filename],stdin=PIPE)
+            ffmpeg = Popen(["ffmpeg","-protocol_whitelist","file,pipe,fd","-y","-f","s16le","-ac","1","-ar",str(sample_rate),"-i","-","-c:a","libmp3lame","-ac","1","-ar",str(sample_rate),"-b:a","64k","-metadata",f"title={self.sequence}","-metadata","artist=PySTQC","-f","mp3",filename],stdin=PIPE,stdout=PIPE,stderr=STDOUT)
         except FileNotFoundError:
-            raise FFmpegError("FFmpeg not installed or not in your system PATH!")
+            raise FFmpegError("FFmpeg not installed or not in your system PATH!",returncode=127)
         for toneinfo in steps:
             pcm = bytearray()
             if toneinfo["freq"] is None:
@@ -142,15 +146,26 @@ class STQC:
                     sample = sin(2 * pi * toneinfo["freq"] * sn / sample_rate)
                     value = int(sample * 30000)
                     pcm.extend(value.to_bytes(2, byteorder="little", signed=True))
-            if ffmpeg.poll() is not None:
-                remove(filename)
-                raise FFmpegError(f"FFmpeg finished unexpected with return code {ffmpeg.returncode}")
             try:
+                if ffmpeg.poll() is not None:
+                    raise BrokenPipeError
                 ffmpeg.stdin.write(pcm)
             except BrokenPipeError:
+                try:
+                    remove(filename)
+                except FileNotFoundError:
+                    pass
+                stdout, _ = ffmpeg.communicate()
+                raise FFmpegError(f"FFmpeg finished unexpectedly with return code {ffmpeg.returncode}",returncode=ffmpeg.returncode,ffmpeg_log=stdout.decode("utf-8"))
+        try:
+            ffmpeg.stdin.close()
+        except BrokenPipeError:
+            try:
                 remove(filename)
-                raise FFmpegError(f"FFmpeg died during writing samples to stdin! Exit code: {ffmpeg.returncode}")
-        ffmpeg.stdin.close()
+            except FileNotFoundError:
+                pass
+            stdout, _ = ffmpeg.communicate()
+            raise FFmpegError(f"FFmpeg finished unexpectedly with return code {ffmpeg.returncode}",returncode=ffmpeg.returncode,ffmpeg_log=stdout.decode("utf-8"))
         ffmpeg.wait()
     def __str__(self):
         return self.sequence
@@ -158,7 +173,8 @@ class STQC:
         valid, _ = self.validate(self.sequence)
         return valid
     def __repr__(self):
-        return f"stqc_sequence=seq={self.sequence}:ln={len(self.sequence)}:iterstate={self.position}"
+        valid, err = self.validate(self.sequence)
+        return f"stqc_sequence=seq={self.sequence}:ln={len(self.sequence)}:valid={valid}:err={err}:iterstate={self.position}"
     def __iter__(self):
         self.position = 0
         return self
@@ -272,12 +288,10 @@ class UnitCall:
     @classmethod
     def from_stqc(cls, stqc:STQC):
         if len(stqc) != cls.STQC_LENGTH:
-            raise ValueError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
-        dec = stqc.to_decimal()
-        if isinstance(dec, int):
-            return cls.from_decimal(dec)
-        else:
-            raise TypeError("The STQC object must contain only one sequence!")
+            raise STQCError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
+        if len(stqc.split()) != 1:
+            raise STQCError("The STQC object must contain only one sequence!")
+        return cls.from_decimal(stqc.to_decimal())
     def to_decimal(self) -> int:
         return self.call * 1000 + self.unit
     def to_stqc(self) -> STQC:
@@ -302,12 +316,10 @@ class Decoder_v210:
     @classmethod
     def from_stqc(cls, stqc:STQC):
         if len(stqc) != cls.STQC_LENGTH:
-            raise ValueError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
-        dec = stqc.to_decimal()
-        if isinstance(dec, int):
-            return cls.from_decimal(dec)
-        else:
-            raise TypeError(f"The STQC object must contain only one sequence!")
+            raise STQCError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
+        if len(stqc.split()) != 1:
+            raise STQCError("The STQC object must contain only one sequence!")
+        return cls.from_decimal(stqc.to_decimal())
     def to_decimal(self) -> int:
         return self.powiat
     def to_stqc(self) -> STQC:
@@ -335,9 +347,9 @@ class Decoder_v215:
     @classmethod
     def from_stqc(cls, stqc:STQC):
         if len(stqc) != cls.STQC_LENGTH:
-            raise ValueError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
+            raise STQCError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
         if len(stqc.split()) != 1:
-            raise ValueError(f"The STQC object must contain only one sequence!")
+            raise STQCError("The STQC object must contain only one sequence!")
         return cls.from_decimal(stqc.to_decimal())
     def to_decimal(self) -> int:
         return self.voivodeship * 64 + self.powiat
@@ -365,9 +377,9 @@ class Decoder_v216:
     @classmethod
     def from_stqc(cls, stqc:STQC):
         if len(stqc) != cls.STQC_LENGTH:
-            raise ValueError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
+            raise STQCError(f"STQC sequence have to be {cls.STQC_LENGTH} tones long!")
         if len(stqc.split()) != 1:
-            raise ValueError(f"The STQC object must contain only one sequence!")
+            raise STQCError("The STQC object must contain only one sequence!")
         return cls.from_decimal(stqc.to_decimal())
     def to_decimal(self) -> int:
         return (self.area // 100) * 64 + (self.area % 100)

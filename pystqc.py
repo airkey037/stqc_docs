@@ -398,9 +398,44 @@ def main(args):
 
 # Start the main() function only if program was started directly, not imported
 if __name__ == "__main__":
-    parser = ArgumentParser(description="A powerful utility to encode, decode, transcode and generate STQC sequences compatible with Bartek's STQC decoder v2.10, v2.15 and v2.16",epilog=GPL_NOTE,formatter_class=RawTextHelpFormatter)
+    # Define params info
+    INPUT_FORMATS = {
+        "rawstqc": "Raw STQC sequence (e.g. 4012012)",
+        "rawdec": "Decimal representation of raw STQC sequence (e.g. 390)",
+        "v210": "Powiat, unit and command for decoder v2.10 in format powiat:unit:command (e.g. 390:82:ALARM)",
+        "v210stqc": "Takes STQC sequence and decodes it as a v2.10 information (e.g. 4012012 40104324)",
+        "v210raw": "Takes 2 decimal numbers and decodes them as a v2.10 information (e.g. 390 1082)",
+        "v215": "Voivodeship, powiat, unit and command for decoder v2.15 in format voivodeship:powiat:unit:command (e.g. 6:6:82:ALARM)",
+        "v215stqc": "Takes STQC sequence and decodes it as a v2.15 information (e.g. 4012012 40104324)",
+        "v215raw": "Takes 2 decimal numbers and decodes them as a v2.15 information (e.g. 390 1082)",
+        "v216": "Area, unit and command for decoder v2.16 in format area:unit:command (e.g. 606:82:ALARM)",
+        "v216stqc": "Takes STQC sequence and decodes it as a v2.16 information (e.g. 4012012 40104324)",
+        "v216raw": "Takes 2 decimal numbers and decodes them as a v2.16 information (e.g. 390 1082)"
+    }
+    OUTPUT_FORMATS = {
+        "stqc": "STQC sequence",
+        "dec": "Decimal representation of STQC sequence",
+        "audio": "Generates STQC sequence sound and saves it to the specified output (see Audio generation options section for more info)",
+        "v210": "Powiat, unit and command for decoder v2.10",
+        "v215": "Voivodeship, powiat, unit and command for decoder v2.15",
+        "v216": "Area, unit and command for decoder v2.16",
+    }
+    EPILOG = "Available input formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in INPUT_FORMATS.items()])+"\n\nAvailable output formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in OUTPUT_FORMATS.items()])+"\n\n"+GPL_NOTE
+    parser = ArgumentParser(description="A powerful utility to encode, decode, transcode and generate STQC sequences compatible with Bartek's STQC decoder v2.10, v2.15 and v2.16",epilog=EPILOG,formatter_class=RawTextHelpFormatter)
     parser.add_argument("-v","--version",help="Display program version",action="version",version=__version__)
     parser.add_argument("-c","--credits",help="Display program authors",action="version",version=AUTHORS)
     parser.add_argument("-l","--license",help="Display program license (GNU GPL 3.0)",action="version",version=GPL3_0)
+    io_group = parser.add_argument_group("Input/output options")
+    io_group.add_argument("-f","--input-format",help="Specify input format. See all input formats and descriptions below",type=str,choices=INPUT_FORMATS.keys(),required=True,metavar="input_format")
+    io_group.add_argument("-i","--input",help="Input value",type=str,required=True)
+    io_group.add_argument("-o","--output-format",help="Specify output format. See all output formats and descriptions below",type=str,choices=OUTPUT_FORMATS.keys(),required=True,metavar="output_format")
+    io_group.add_argument("-j","--json",help="Output in JSON (good for any further parsing)",action="store_true")
+    audio_group = parser.add_argument_group("Audio generation options (if output format was set to audio)")
+    audio_group.add_argument("--output-file",help="Specify audio file location. When not specified, default file name will be applied",type=str,metavar="file")
+    audio_group.add_argument("--tone-length",help="Set length of specific tone in seconds. By default 0.1",type=float,default=0.1,metavar="0.1")
+    audio_group.add_argument("--break-length",help="Set length of each break in seconds. By default 0.2",type=float,default=0.2,metavar="0.2")
+    audio_group.add_argument("--lhead",help="Set length in seconds of additional break applied at the beginning of the file. Set 0 to disable. By default 0 (disabled)",type=float,default=0.0,metavar="0")
+    audio_group.add_argument("--rhead",help="Set length in seconds of additional break applied at the end of the file. Set 0 to disable. By default 0 (disabled)",type=float,default=0.0,metavar="0")
+    audio_group.add_argument("--sample-rate",help="Set sample rate in Hz from range 22050 - 192000. By default 48000",type=int,default=48000,metavar="48000")
     args = parser.parse_args()
     main(args)

@@ -1,6 +1,9 @@
 # PySTQC - a powerful utility to encode, decode, transcode and generate STQC sequences compatible with Bartek's STQC decoder v2.10, v2.15 and v2.16.
 # Copyright (c) 2026 AirKeyooo <airkeyooo@gmail.com>
 
+# IT IS FORBIDDEN TO USE THIS PROGRAM TO ILLEGALLY ENABLE ALARM SIRENS!!!
+# Program authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.
+
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -22,7 +25,7 @@ from subprocess import check_output, DEVNULL, CalledProcessError, Popen, PIPE, S
 from math import sin, pi
 from os import remove
 from re import sub
-from time import sleep
+from sys import stderr, exit
 
 # Define some legal info
 GPL_NOTE="This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with this program.  If not, see <https://www.gnu.org/licenses/>."
@@ -394,7 +397,7 @@ class Decoder_v216:
 
 # Main function
 def main(args):
-    pass
+    print("Copyright (c) 2026 AirKeyooo <airkeyooo@gmail.com>\nIT IS FORBIDDEN TO USE THIS PROGRAM TO ILLEGALLY ENABLE ALARM SIRENS!!!\nProgram authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.",file=stderr)
 
 # Start the main() function only if program was started directly, not imported
 if __name__ == "__main__":
@@ -421,7 +424,7 @@ if __name__ == "__main__":
         "v216": "Area, unit and command for decoder v2.16",
     }
     EPILOG = "Available input formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in INPUT_FORMATS.items()])+"\n\nAvailable output formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in OUTPUT_FORMATS.items()])+"\n\n"+GPL_NOTE
-    parser = ArgumentParser(description="A powerful utility to encode, decode, transcode and generate STQC sequences compatible with Bartek's STQC decoder v2.10, v2.15 and v2.16",epilog=EPILOG,formatter_class=RawTextHelpFormatter)
+    parser = ArgumentParser(description="A powerful utility to encode, decode, transcode and generate STQC sequences compatible with Bartek's STQC decoder v2.10, v2.15 and v2.16\n\nIT IS FORBIDDEN TO USE THIS PROGRAM TO ILLEGALLY ENABLE ALARM SIRENS!!!\nProgram authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.",epilog=EPILOG,formatter_class=RawTextHelpFormatter)
     parser.add_argument("-v","--version",help="Display program version",action="version",version=__version__)
     parser.add_argument("-c","--credits",help="Display program authors",action="version",version=AUTHORS)
     parser.add_argument("-l","--license",help="Display program license (GNU GPL 3.0)",action="version",version=GPL3_0)

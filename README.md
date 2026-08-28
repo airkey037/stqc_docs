@@ -12,7 +12,7 @@ Niektóre programy zawarte w repozytorium wymagają programu [FFmpeg](https://ff
 
 Projekt jest udostępniony na licencji GNU GPL 3.0. Jej pełny zapis możesz znaleźć w pliku **LICENSE**.
 
-## Surowo zabronione jest używanie poniższej dokumentacji oraz programów do nielegalnego uruchamiania syren alarmowych!!
+## SUROWO ZABRONIONE JEST UŻYWANIE PONIŻSZEJ DOKUMENTACJI ORAZ PROGRAMÓW DO NIELEGALNEGO URUCHAMIANIA SYREN ALARMOWYCH!!! Autorzy programu są ZWOLNIENI Z ODPOWIEDZIALNOŚCI za jakiekolwiek nielegalne użycia - ta dokumentacja została stworzona dla strażaków i innych ludzi, którzy chcą otrzymywać powiadomienia o alarmach w pobliskich jednostkach OSP. Autorzy mają nadzieję, że będzie ona używana JEDYNIE do tego celu.
 
 Projekt jest podzielony na kilka folderów w celu łatwiejszej nawigacji:
 
@@ -34,7 +34,7 @@ Some programs in this repo require [FFmpeg](https://ffmpeg.org/) to work.
 
 Project is shared under terms of GNU GPL 3.0 licence. You can whole license in the **LICENSE** file.
 
-## It is forbidden to use this documentation and programs to illegally enable alarm sirens!!
+## IT IS FORBIDDEN TO USE THIS DOCUMENTATION AND PROGRAMS TO ILLEGALLY ENABLE ALARM SIRENS!!! Program authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.
 
 Project is divided into folders for easier navigation:
 

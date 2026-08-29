@@ -113,6 +113,10 @@ class STQC:
         for no in spaced:
             objects.append(STQC(no))
         return tuple(objects)
+    def set_length(self, length:int=None) -> STQC:
+        if len(self.split()) != 1:
+            raise ValueError("This function works only when the object contains only one sequence (without any breaks)")
+        return STQC.from_decimal(self.to_decimal(), length)
     def generate_sound(self, filename:str=None, tone_length:float=0.1, break_length:float=0.2, lhead:float=0.0, rhead:float=0.0, sample_rate:int=48000):
         FREQS = {
             "0": 980,
@@ -403,25 +407,19 @@ def main(args):
 if __name__ == "__main__":
     # Define params info
     INPUT_FORMATS = {
-        "rawstqc": "Raw STQC sequence (e.g. 4012012)",
-        "rawdec": "Decimal representation of raw STQC sequence (e.g. 390)",
-        "v210": "Powiat, unit and command for decoder v2.10 in format powiat:unit:command (e.g. 390:82:ALARM)",
-        "v210stqc": "Takes STQC sequence and decodes it as a v2.10 information (e.g. 4012012 40104324)",
-        "v210raw": "Takes 2 decimal numbers and decodes them as a v2.10 information (e.g. 390 1082)",
-        "v215": "Voivodeship, powiat, unit and command for decoder v2.15 in format voivodeship:powiat:unit:command (e.g. 6:6:82:ALARM)",
-        "v215stqc": "Takes STQC sequence and decodes it as a v2.15 information (e.g. 4012012 40104324)",
-        "v215raw": "Takes 2 decimal numbers and decodes them as a v2.15 information (e.g. 390 1082)",
-        "v216": "Area, unit and command for decoder v2.16 in format area:unit:command (e.g. 606:82:ALARM)",
-        "v216stqc": "Takes STQC sequence and decodes it as a v2.16 information (e.g. 4012012 40104324)",
-        "v216raw": "Takes 2 decimal numbers and decodes them as a v2.16 information (e.g. 390 1082)"
+        "stqc": "Takes raw STQC sequence (e.g. 4012012 40104324)",
+        "dec": "Takes a decimal representation of raw STQC sequence (e.g. 390 1082)",
+        "v210": "Takes powiat, unit and command for decoder v2.10 in format powiat:unit:command (e.g. 390:82:ALARM)",
+        "v215": "Takes voivodeship, powiat, unit and command for decoder v2.15 in format voivodeship:powiat:unit:command (e.g. 6:6:82:ALARM)",
+        "v216": "Takes area, unit and command for decoder v2.16 in format area:unit:command (e.g. 606:82:ALARM)"
     }
     OUTPUT_FORMATS = {
-        "stqc": "STQC sequence",
-        "dec": "Decimal representation of STQC sequence",
+        "stqc": "Outputs an STQC sequence",
+        "dec": "Outputs a decimal representation of STQC sequence",
         "audio": "Generates STQC sequence sound and saves it to the specified output (see Audio generation options section for more info)",
-        "v210": "Powiat, unit and command for decoder v2.10",
-        "v215": "Voivodeship, powiat, unit and command for decoder v2.15",
-        "v216": "Area, unit and command for decoder v2.16",
+        "v210": "Outputs powiat, unit and command for decoder v2.10",
+        "v215": "Outputs voivodeship, powiat, unit and command for decoder v2.15",
+        "v216": "Outputs area, unit and command for decoder v2.16",
     }
     EPILOG = "Available input formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in INPUT_FORMATS.items()])+"\n\nAvailable output formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in OUTPUT_FORMATS.items()])+"\n\n"+GPL_NOTE
     parser = ArgumentParser(description="A powerful utility to encode, decode, transcode and generate STQC sequences compatible with Bartek's STQC decoder v2.10, v2.15 and v2.16\n\nIT IS FORBIDDEN TO USE THIS PROGRAM TO ILLEGALLY ENABLE ALARM SIRENS!!!\nProgram authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.",epilog=EPILOG,formatter_class=RawTextHelpFormatter)
@@ -433,6 +431,7 @@ if __name__ == "__main__":
     io_group.add_argument("-i","--input",help="Input value",type=str,required=True)
     io_group.add_argument("-o","--output-format",help="Specify output format. See all output formats and descriptions below",type=str,choices=OUTPUT_FORMATS.keys(),required=True,metavar="output_format")
     io_group.add_argument("-j","--json",help="Output in JSON (good for any further parsing)",action="store_true")
+    io_group.add_argument("-s","--sequence-length",help="If output format was set to STQC and only one sequence (stqc or decimal) is given at the input, set the length of the sequence; otherwise this parameter will be ignored",type=int)
     audio_group = parser.add_argument_group("Audio generation options (if output format was set to audio)")
     audio_group.add_argument("--output-file",help="Specify audio file location. When not specified, default file name will be applied",type=str,metavar="file")
     audio_group.add_argument("--tone-length",help="Set length of specific tone in seconds. By default 0.1",type=float,default=0.1,metavar="0.1")

@@ -113,6 +113,8 @@ class STQC:
         for no in spaced:
             objects.append(STQC(no))
         return tuple(objects)
+    def strip(self) -> STQC:
+        return STQC(self.sequence.strip())
     def set_length(self, length:int=None) -> STQC:
         if len(self.split()) != 1:
             raise ValueError("This function works only when the object contains only one sequence (without any breaks)")
@@ -402,13 +404,122 @@ class Decoder_v216:
 # Main function
 def main(args):
     print("Copyright (c) 2026 AirKeyooo <airkeyooo@gmail.com>\nIT IS FORBIDDEN TO USE THIS PROGRAM TO ILLEGALLY ENABLE ALARM SIRENS!!!\nProgram authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.",file=stderr)
-
+    if args.input_format == "stqc":
+        try:
+            stqc = STQC(args.input)
+        except STQCError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(20)
+    elif args.input_format == "dec":
+        splitted = args.input.split(" ")
+        stqc = STQC("")
+        for no in splitted:
+            chrlensp = no.split(":")
+            try:
+                number = int(chrlensp[0])
+            except ValueError:
+                print(f"[ERROR] {chrlensp[0]} is an invalid number!",file=stderr)
+                exit(13)
+            try:
+                length = int(chrlensp[1])
+            except IndexError:
+                length = None
+            except ValueError:
+                print(f"[ERROR] {chrlensp[1]} is an invalid number!",file=stderr)
+                exit(13)
+            try:
+                stqc /= STQC.from_decimal(number, length)
+            except ValueError as e:
+                print("[ERROR]",e,file=stderr)
+                exit(20)
+        stqc = stqc.strip()
+    elif args.input_format == "v210":
+        splitted = args.input.split(":")
+        try:
+            powiat = int(splitted[0])
+            unit = int(splitted[1])
+            command = UnitCall.CALLTYPES[splitted[2]]
+        except IndexError:
+            print("[ERROR] Invalid input format for decoder v2.10!",file=stderr)
+            exit(13)
+        except ValueError:
+            print("[ERROR] Invalid numbers!",file=stderr)
+            exit(13)
+        except KeyError:
+            print("[ERROR] Invalid command! Allowed commands:",", ".join(UnitCall.CALLTYPES.keys()),file=stderr)
+            exit(13)
+        try:
+            unitcall = UnitCall(unit, command)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        try:
+            decoder_v210 = Decoder_v210(powiat)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        stqc = decoder_v210.to_stqc() / unitcall.to_stqc()
+    elif args.input_format == "v215":
+        splitted = args.input.split(":")
+        try:
+            voivodeship = int(splitted[0])
+            powiat = int(splitted[1])
+            unit = int(splitted[2])
+            command = UnitCall.CALLTYPES[splitted[3]]
+        except IndexError:
+            print("[ERROR] Invalid input format for decoder v2.15!",file=stderr)
+            exit(13)
+        except ValueError:
+            print("[ERROR] Invalid numbers!",file=stderr)
+            exit(13)
+        except KeyError:
+            print("[ERROR] Invalid command! Allowed commands:",", ".join(UnitCall.CALLTYPES.keys()),file=stderr)
+            exit(13)
+        try:
+            unitcall = UnitCall(unit, command)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        try:
+            decoder_v215 = Decoder_v215(voivodeship, powiat)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        stqc = decoder_v215.to_stqc() / unitcall.to_stqc()
+    elif args.input_format == "v216":
+        splitted = args.input.split(":")
+        try:
+            area = int(splitted[0])
+            unit = int(splitted[1])
+            command = UnitCall.CALLTYPES[splitted[2]]
+        except IndexError:
+            print("[ERROR] Invalid input format for decoder v2.16!",file=stderr)
+            exit(13)
+        except ValueError:
+            print("[ERROR] Invalid numbers!",file=stderr)
+            exit(13)
+        except KeyError:
+            print("[ERROR] Invalid command! Allowed commands:",", ".join(UnitCall.CALLTYPES.keys()),file=stderr)
+            exit(13)
+        try:
+            unitcall = UnitCall(unit, command)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        try:
+            decoder_v216 = Decoder_v216(area)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        stqc = decoder_v216.to_stqc() / unitcall.to_stqc()
+    print(repr(stqc))
+    
 # Start the main() function only if program was started directly, not imported
 if __name__ == "__main__":
     # Define params info
     INPUT_FORMATS = {
         "stqc": "Takes raw STQC sequence (e.g. 4012012 40104324)",
-        "dec": "Takes a decimal representation of raw STQC sequence (e.g. 390 1082)",
+        "dec": "Takes a decimal representation of raw STQC sequence with ability to specify length of each one (e.g. 390:7 1082:8)",
         "v210": "Takes powiat, unit and command for decoder v2.10 in format powiat:unit:command (e.g. 390:82:ALARM)",
         "v215": "Takes voivodeship, powiat, unit and command for decoder v2.15 in format voivodeship:powiat:unit:command (e.g. 6:6:82:ALARM)",
         "v216": "Takes area, unit and command for decoder v2.16 in format area:unit:command (e.g. 606:82:ALARM)"
@@ -421,7 +532,7 @@ if __name__ == "__main__":
         "v215": "Outputs voivodeship, powiat, unit and command for decoder v2.15",
         "v216": "Outputs area, unit and command for decoder v2.16",
     }
-    EPILOG = "Available input formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in INPUT_FORMATS.items()])+"\n\nAvailable output formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in OUTPUT_FORMATS.items()])+"\n\n"+GPL_NOTE
+    EPILOG = "Available input formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in INPUT_FORMATS.items()])+"\n\nAvailable output formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in OUTPUT_FORMATS.items()])+"\n\nAvailable commands:\n"+"\n".join([f"   {fname}" for fname in UnitCall.CALLTYPES.keys()])+"\n\n"+GPL_NOTE
     parser = ArgumentParser(description="A powerful utility to encode, decode, transcode and generate STQC sequences compatible with Bartek's STQC decoder v2.10, v2.15 and v2.16\n\nIT IS FORBIDDEN TO USE THIS PROGRAM TO ILLEGALLY ENABLE ALARM SIRENS!!!\nProgram authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.",epilog=EPILOG,formatter_class=RawTextHelpFormatter)
     parser.add_argument("-v","--version",help="Display program version",action="version",version=__version__)
     parser.add_argument("-c","--credits",help="Display program authors",action="version",version=AUTHORS)

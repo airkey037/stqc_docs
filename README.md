@@ -28,8 +28,6 @@ Program **pystqc.py** to pełny i kompletny program pozwalający na dekodowanie,
 python3 pystqc.py --help
 ```
 
-**INFO:** Program jeszcze powstaje (dlatego znajduje się w osobnym branchu). Gdy zostanie ukończony, ta wiadomość zniknie, a branch zostanie scalony do main.
-
 ---
 
 ***NOTE:** I apologise if my English isn't perfect. I hope that you'll understand this documentation \:)*
@@ -59,5 +57,3 @@ Project is divided into folders for easier navigation:
 ```bash
 python3 pystqc.py --help
 ```
-
-**INFO:** Program isn't finished yet (that's why it is in a different branch). When it will be finished, this note will disappear, and this branch will be merged back to main.

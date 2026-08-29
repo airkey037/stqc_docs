@@ -405,12 +405,14 @@ class Decoder_v216:
 # Main function
 def main(args):
     print("Copyright (c) 2026 AirKeyooo <airkeyooo@gmail.com>\nIT IS FORBIDDEN TO USE THIS PROGRAM TO ILLEGALLY ENABLE ALARM SIRENS!!!\nProgram authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.",file=stderr)
+    # Function that can print given data in default style or in JSON
     def fmt(data:dict) -> str:
         if args.json:
             from json import dumps
             return dumps(data, ensure_ascii=False)
         else:
             return "\n".join([f"{k}: {v}" for k, v in data.items()])
+    # Input formatters. Their role is to convert all possible input formats to STQC class
     if args.input_format == "stqc":
         try:
             stqc = STQC(args.input)
@@ -519,6 +521,7 @@ def main(args):
             print("[ERROR]",e,file=stderr)
             exit(13)
         stqc = decoder_v216.to_stqc() / unitcall.to_stqc()
+    # Additional output formatter that implements support for --sequence-length parameter
     if args.input_format in ("stqc", "dec") and args.output_format == "stqc" and args.sequence_length is not None:
         if len(stqc.split()) != 1:
             print("[ERROR] You can use the -s/--sequence-length parameter only when one sequence was passed at the input!",file=stderr)
@@ -530,6 +533,7 @@ def main(args):
             exit(20)
         print(fmt({"Sequence":str(applied_len)}))
         exit(0)
+    # Output formatters
     if args.output_format == "stqc":
         print(fmt({"Sequence":str(stqc)}))
         exit(0)
@@ -632,7 +636,7 @@ def main(args):
                 print(f"FFmpeg log:\n{fferr.ffmpeg_log}",file=stderr)
             exit(19)
     
-# Start the main() function only if program was started directly, not imported
+# Parse args and start the main() function only if program was started directly, not imported
 if __name__ == "__main__":
     # Define params info
     INPUT_FORMATS = {
@@ -651,6 +655,7 @@ if __name__ == "__main__":
         "v216": "Outputs area, unit and command for decoder v2.16",
     }
     EPILOG = "Available input formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in INPUT_FORMATS.items()])+"\n\nAvailable output formats:\n"+"\n".join([f"   {fname} - {desc}" for fname, desc in OUTPUT_FORMATS.items()])+"\n\nAvailable commands:\n"+"\n".join([f"   {fname}" for fname in UnitCall.CALLTYPES.keys()])+"\n\n"+GPL_NOTE
+    # Define Argument Parser
     parser = ArgumentParser(description="A powerful utility to encode, decode, transcode and generate STQC sequences compatible with Bartek's STQC decoder v2.10, v2.15 and v2.16\n\nIT IS FORBIDDEN TO USE THIS PROGRAM TO ILLEGALLY ENABLE ALARM SIRENS!!!\nProgram authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.",epilog=EPILOG,formatter_class=RawTextHelpFormatter)
     parser.add_argument("-v","--version",help="Display program version",action="version",version=__version__)
     parser.add_argument("-c","--credits",help="Display program authors",action="version",version=AUTHORS)
@@ -668,5 +673,6 @@ if __name__ == "__main__":
     audio_group.add_argument("--lhead",help="Set length in seconds of additional break applied at the beginning of the file. Set 0 to disable. By default 0 (disabled)",type=float,default=0.0,metavar="0")
     audio_group.add_argument("--rhead",help="Set length in seconds of additional break applied at the end of the file. Set 0 to disable. By default 0 (disabled)",type=float,default=0.0,metavar="0")
     audio_group.add_argument("--sample-rate",help="Set sample rate in Hz from range 22050 - 192000. By default 48000",type=int,default=48000,metavar="48000")
+    # Parse arguments and start main()
     args = parser.parse_args()
     main(args)

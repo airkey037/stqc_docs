@@ -404,12 +404,18 @@ class Decoder_v216:
 # Main function
 def main(args):
     print("Copyright (c) 2026 AirKeyooo <airkeyooo@gmail.com>\nIT IS FORBIDDEN TO USE THIS PROGRAM TO ILLEGALLY ENABLE ALARM SIRENS!!!\nProgram authors ARE NOT RESPONSIBLE for any illegal usage of this program - it was created for firefighters and other people to allow them receiving notifications about alarms in nearby OSP units, and authors hope, that it will be used ONLY for this purpose.",file=stderr)
+    def fmt(data:dict) -> str:
+        if args.json:
+            from json import dumps
+            return dumps(data, ensure_ascii=False)
+        else:
+            return "\n".join([f"{k}: {v}" for k, v in data.items()])
     if args.input_format == "stqc":
         try:
             stqc = STQC(args.input)
         except STQCError as e:
             print("[ERROR]",e,file=stderr)
-            exit(20)
+            exit(13)
     elif args.input_format == "dec":
         splitted = args.input.split(" ")
         stqc = STQC("")
@@ -431,7 +437,7 @@ def main(args):
                 stqc /= STQC.from_decimal(number, length)
             except ValueError as e:
                 print("[ERROR]",e,file=stderr)
-                exit(20)
+                exit(13)
         stqc = stqc.strip()
     elif args.input_format == "v210":
         splitted = args.input.split(":")
@@ -512,7 +518,106 @@ def main(args):
             print("[ERROR]",e,file=stderr)
             exit(13)
         stqc = decoder_v216.to_stqc() / unitcall.to_stqc()
-    print(repr(stqc))
+    if args.input_format in ("stqc", "dec") and args.output_format == "stqc" and args.sequence_length is not None:
+        if len(stqc.split()) != 1:
+            print("[ERROR] You can use the -s/--sequence-length parameter only when one sequence was passed at the input!",file=stderr)
+            exit(13)
+        try:
+            applied_len = STQC.from_decimal(stqc.to_decimal(), args.sequence_length)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        print(fmt({"Sequence":str(applied_len)}))
+        exit(0)
+    if args.output_format == "stqc":
+        print(fmt({"Sequence":str(stqc)}))
+        exit(0)
+    elif args.output_format == "dec":
+        as_numbers = stqc.to_decimal()
+        if isinstance(as_numbers, int):
+            print(fmt({"Digits":str(as_numbers)}))
+        if isinstance(as_numbers, tuple):
+            as_chrs = [str(x) for x in as_numbers]
+            print(fmt({"Digits":" ".join(as_chrs)}))
+        exit(0)
+    elif args.output_format == "v210":
+        splitted = stqc.split()
+        try:
+            sq1 = splitted[0]
+            sq2 = splitted[1]
+        except IndexError:
+            print("[ERROR] Invalid input sequence for formatter v2.10",file=stderr)
+            exit(13)
+        try:
+            unitcall = UnitCall.from_stqc(sq2)
+        except STQCError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        try:
+            decoder_v210 = Decoder_v210.from_stqc(sq1)
+        except STQCError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        print(fmt({"Powiat":decoder_v210.powiat,"Unit":unitcall.unit,"Command":unitcall.call_name}))
+        exit(0)
+    elif args.output_format == "v215":
+        splitted = stqc.split()
+        try:
+            sq1 = splitted[0]
+            sq2 = splitted[1]
+        except IndexError:
+            print("[ERROR] Invalid input sequence for formatter v2.15",file=stderr)
+            exit(13)
+        try:
+            unitcall = UnitCall.from_stqc(sq2)
+        except STQCError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        try:
+            decoder_v215 = Decoder_v215.from_stqc(sq1)
+        except STQCError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        except ValueError  as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        print(fmt({"Voivodeship":decoder_v215.voivodeship,"Powiat":decoder_v215.powiat,"Unit":unitcall.unit,"Command":unitcall.call_name}))
+        exit(0)
+    elif args.output_format == "v216":
+        splitted = stqc.split()
+        try:
+            sq1 = splitted[0]
+            sq2 = splitted[1]
+        except IndexError:
+            print("[ERROR] Invalid input sequence for formatter v2.16",file=stderr)
+            exit(13)
+        try:
+            unitcall = UnitCall.from_stqc(sq2)
+        except STQCError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        try:
+            decoder_v216 = Decoder_v216.from_stqc(sq1)
+        except STQCError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        except ValueError as e:
+            print("[ERROR]",e,file=stderr)
+            exit(13)
+        print(fmt({"Area":decoder_v216.area,"Unit":unitcall.unit,"Command":unitcall.call_name}))
+        exit(0)
     
 # Start the main() function only if program was started directly, not imported
 if __name__ == "__main__":

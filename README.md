@@ -22,6 +22,12 @@ Projekt jest podzielony na kilka folderów w celu łatwiejszej nawigacji:
 4. **STQC decoder v2.15** - w tym folderze znajdują się informacje, w jaki sposób [Dekoder STQC Bartka (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) wyznacza numer województwa oraz powiatu.
 5. **STQC decoder v2.16** - w tym folderze znajdują się informacje, w jaki sposób [Dekoder STQC Bartka (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) wyznacza numer obszaru.
 
+Program **pystqc.py** to pełny i kompletny program pozwalający na dekodowanie, transkodowanie, generowanie oraz enkodowanie wszystkich powyższych formatów. Aby dowiedzieć się więcej, uruchom go z opcją *--help*:
+
+```bash
+python3 pystqc.py --help
+```
+
 ---
 
 ***NOTE:** I apologise if my English isn't perfect. I hope that you'll understand this documentation \:)*
@@ -45,3 +51,9 @@ Project is divided into folders for easier navigation:
 5. **STQC decoder v2.16** - in this folder you can find documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) is decoding area number.
 
 \* I can't translate "powiat" to English, because I don't know any good word that matches exactly its meaning. Generally Voivodeships in Poland are divided into smaller administration regions called "powiats".
+
+**pystqc.py** program is a full and powerful utility to encode, decode, transcode and generate all formats mentioned above. If you want to learn more, run:
+
+```bash
+python3 pystqc.py --help
+```

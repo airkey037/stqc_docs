@@ -176,6 +176,7 @@ class STQC:
             stdout, _ = ffmpeg.communicate()
             raise FFmpegError(f"FFmpeg finished unexpectedly with return code {ffmpeg.returncode}",returncode=ffmpeg.returncode,ffmpeg_log=stdout.decode("utf-8"))
         ffmpeg.wait()
+        return filename
     def __str__(self):
         return self.sequence
     def __bool__(self):
@@ -415,7 +416,7 @@ def main(args):
             stqc = STQC(args.input)
         except STQCError as e:
             print("[ERROR]",e,file=stderr)
-            exit(13)
+            exit(20)
     elif args.input_format == "dec":
         splitted = args.input.split(" ")
         stqc = STQC("")
@@ -437,7 +438,7 @@ def main(args):
                 stqc /= STQC.from_decimal(number, length)
             except ValueError as e:
                 print("[ERROR]",e,file=stderr)
-                exit(13)
+                exit(20)
         stqc = stqc.strip()
     elif args.input_format == "v210":
         splitted = args.input.split(":")
@@ -526,7 +527,7 @@ def main(args):
             applied_len = STQC.from_decimal(stqc.to_decimal(), args.sequence_length)
         except ValueError as e:
             print("[ERROR]",e,file=stderr)
-            exit(13)
+            exit(20)
         print(fmt({"Sequence":str(applied_len)}))
         exit(0)
     if args.output_format == "stqc":
@@ -618,6 +619,18 @@ def main(args):
             exit(13)
         print(fmt({"Area":decoder_v216.area,"Unit":unitcall.unit,"Command":unitcall.call_name}))
         exit(0)
+    elif args.output_format == "audio":
+        if args.sample_rate < 22050 or args.sample_rate > 192000:
+            print("[ERROR] Sample rate value have to fit in range 22050-192000!")
+            exit(19)
+        try:
+            filename = stqc.generate_sound(filename=args.output_file,tone_length=args.tone_length,break_length=args.break_length,lhead=args.lhead,rhead=args.rhead,sample_rate=args.sample_rate)
+            print(f"Audio generation finished successfully! STQC sequence was saved to file {filename}")
+        except FFmpegError as fferr:
+            print("[ERROR]",fferr,file=stderr)
+            if fferr.ffmpeg_log:
+                print(f"FFmpeg log:\n{fferr.ffmpeg_log}",file=stderr)
+            exit(19)
     
 # Start the main() function only if program was started directly, not imported
 if __name__ == "__main__":

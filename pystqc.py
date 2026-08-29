@@ -20,6 +20,7 @@
 # For more info, run program with --license option
 
 # Import required libraries
+from __future__ import annotations
 from argparse import ArgumentParser, RawTextHelpFormatter
 from subprocess import check_output, DEVNULL, CalledProcessError, Popen, PIPE, STDOUT
 from math import sin, pi

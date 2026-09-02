@@ -68,7 +68,8 @@ class FFmpegError(SystemError):
         self.ffmpeg_log = ffmpeg_log
 # STQC class that manages raw STQC sequences
 class STQC:
-    def validate(self, sequence:str):
+    @staticmethod
+    def validate(sequence:str):
         ALLOWED_CHARS = ("0", "1", "2", "3", "4")
         for it, chr in enumerate(sequence):
             if chr not in ALLOWED_CHARS and chr != " ":

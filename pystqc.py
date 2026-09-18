@@ -290,7 +290,7 @@ class UnitCall:
         try:
             self.call_name = self.CALLTYPES_REVERSE[call_type]
         except KeyError:
-            raise IndexError("Invalid call type number!")
+            raise IndexError("Invalid call type number!") from None
         self.unit = unit
         if unit < 0 or unit > 999:
             raise ValueError("Unit have to fit in range 0-999!")
@@ -557,18 +557,12 @@ def main(args):
             exit(13)
         try:
             unitcall = UnitCall.from_stqc(sq2)
-        except STQCError as e:
-            print("[ERROR]",e,file=stderr)
-            exit(13)
-        except ValueError as e:
+        except (STQCError, ValueError, IndexError) as e:
             print("[ERROR]",e,file=stderr)
             exit(13)
         try:
             decoder_v210 = Decoder_v210.from_stqc(sq1)
-        except STQCError as e:
-            print("[ERROR]",e,file=stderr)
-            exit(13)
-        except ValueError as e:
+        except (STQCError, ValueError) as e:
             print("[ERROR]",e,file=stderr)
             exit(13)
         print(fmt({"Powiat":decoder_v210.powiat,"Unit":unitcall.unit,"Command":unitcall.call_name}))
@@ -583,18 +577,12 @@ def main(args):
             exit(13)
         try:
             unitcall = UnitCall.from_stqc(sq2)
-        except STQCError as e:
-            print("[ERROR]",e,file=stderr)
-            exit(13)
-        except ValueError as e:
+        except (STQCError, ValueError, IndexError) as e:
             print("[ERROR]",e,file=stderr)
             exit(13)
         try:
             decoder_v215 = Decoder_v215.from_stqc(sq1)
-        except STQCError as e:
-            print("[ERROR]",e,file=stderr)
-            exit(13)
-        except ValueError  as e:
+        except (STQCError, ValueError) as e:
             print("[ERROR]",e,file=stderr)
             exit(13)
         print(fmt({"Voivodeship":decoder_v215.voivodeship,"Powiat":decoder_v215.powiat,"Unit":unitcall.unit,"Command":unitcall.call_name}))
@@ -609,18 +597,12 @@ def main(args):
             exit(13)
         try:
             unitcall = UnitCall.from_stqc(sq2)
-        except STQCError as e:
-            print("[ERROR]",e,file=stderr)
-            exit(13)
-        except ValueError as e:
+        except (STQCError, ValueError, IndexError) as e:
             print("[ERROR]",e,file=stderr)
             exit(13)
         try:
             decoder_v216 = Decoder_v216.from_stqc(sq1)
-        except STQCError as e:
-            print("[ERROR]",e,file=stderr)
-            exit(13)
-        except ValueError as e:
+        except (STQCError, ValueError) as e:
             print("[ERROR]",e,file=stderr)
             exit(13)
         print(fmt({"Area":decoder_v216.area,"Unit":unitcall.unit,"Command":unitcall.call_name}))

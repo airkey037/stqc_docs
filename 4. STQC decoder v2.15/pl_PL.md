@@ -8,37 +8,83 @@ Dokumentacja dla wersji **2.15**
 
 ## Dekodowanie numeru województwa
 
-Bierzemy pierwsze 4 cyfry pierwszej sekwencji:
+**WAŻNE:** Numery województw używane przy selektywnym wywoływaniu nie odpowiadają rzeczywistemu podziałowi administracyjnemu w Polsce. Dla przykładu, dwie jednostki leżące fizycznie w tym samym województwie, mogą w rzeczywistości mieć dwa różne logiczne numery województw.
 
-**4024031** -> **4024**
+Dekodujemy pierwszą sekwencję:
 
-Następnie dekodujemy je (używając metody z folderu 1). Tak otrzymamy numer województwa:
+**4013241** -> **489**
 
-**4024** -> **00022**
+Następnie używamy tego wzoru:
 
-**00022** *(4)* = **10** *(10)*
+$$v = \lfloor \frac{s}{64} \rfloor$$
 
-Wynik: **10**
+Gdzie:
+* v -> numer województwa
+* s -> dziesiętna reprezentacja sekwencji
 
-Numer województwa musi być w zakresie 0-63.
+Podstawiamy wartości:
+
+$$v = \lfloor \frac{489}{64} \rfloor$$
+
+$$v = 7$$
+
+Wynik: **7**
+
+**NOTE:** Numer województwa musi mieścić się w przedziale 0-63.
 
 ---
 
 ## Dekodowanie numeru powiatu
 
-Bierzemy ostatnie 3 cyfry pierwszej sekwencji:
+**WAŻNE:** Numery powiatów używane przy selektywnym wywoływaniu nie odpowiadają rzeczywistemu podziałowi administracyjnemu w Polsce. Dla przykładu, dwie jednostki leżące fizycznie w tym samym powiecie, mogą w rzeczywistości mieć dwa różne logiczne numery powiatów.
 
-**4024031** -> **031**
+Dekodujemy pierwszą sekwencję:
 
-I dekodujemy ją, używając metody z folderu 1:
+**4013241** -> **489**
 
-**031** -> **0031**
+Potem używamy tego wzoru:
 
-**0031** *(4)* = **13** *(10)*
+$$p = s \bmod 64$$
 
-Wynik: **13**
+Gdzie:
+* p -> numer powiatu
+* s -> dziesiętna reprezentacja pierwszej sekwencji
 
-Numer powiatu musi zmieścić się w zakresie 0-63
+Podstawiamy wartości:
+
+$$p = 489 \bmod 64$$
+
+$$p = 41$$
+
+Wynik: **41**
+
+**NOTE:** Numer powiatu musi mieścić się w przedziale 0-63.
+
+---
+
+## Enkodowanie numeru województwa i numeru powiatu
+
+Numer powiatu i numer województwa musi mieścić się w przedziale 0-63. Wybierzmy przykładowe liczby i spróbujmy je zakodować:
+
+Województwo: **31**
+Powiat: **14**
+
+Póżniej używamy tego wzoru:
+
+$$s = 64 \cdot v + p$$
+
+Gdzie:
+* s -> dziesiętna reprezentacja sekwencji
+* v -> numer województwa (0-63)
+* p -> numer powiatu (0-63)
+
+Podstawiamy wartości:
+
+$$s = 64 \cdot 31 + 14$$
+
+$$s = 1998$$
+
+Wynik: **1998**
 
 ---
 

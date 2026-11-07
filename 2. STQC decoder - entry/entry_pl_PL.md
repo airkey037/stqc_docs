@@ -2,7 +2,7 @@
 
 Ta dokumentacja opisuje, jak STQC jest używany w OSP.
 
-Sekwencja użyta do wysłania komend jest zbudowana z 7 tonów (100ms każdy), 200ms ciszy i 8 tonów (100ms każdy). Całe wywołanie trwa 1.7s.
+Układ sekwencji do wysłania komend do syren alarmowych jest zbudowana z 7 tonów (100ms każdy), 200ms ciszy i 8 tonów (100ms każdy). Całe wywołanie trwa 1.7s.
 
 Przykład:
 
@@ -12,12 +12,14 @@ Przykład:
 
 ## Specyfikacja radiowa
 
-Straż używa tych częstotliwości do wysyłania i wymiany informacji:
+Straż Pożarna w Polsce używa tych częstotliwości do wysyłania i wymiany informacji:
 
 ```text
 148.725 MHz - TX
 148.825 MHz - RX
 ```
+
+**INFO:** Te kanały są używane **tylko** do transmisji sekwencji - kanały głosowe są odseparowane od tych używanych do transmisji standardów STQC w celu uniknięcia zakłóceń, a ich częstotliwości zależą od regionu.
 
 * Modulacja: **NFM** (Narrowband Frequency Modulation)
 * Szerokość kanału: 12.5 kHz

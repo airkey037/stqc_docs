@@ -19,19 +19,19 @@ ffmpeg -f lavfi -i sine=frequency=980 -t 2 -c:a libmp3lame -ac 1 -ar 44100 -f mp
 
 ### Przykładowe enkodowanie
 
-Spróbujmy przeprowadzić przykładowy proces enkodowania dla liczby 72. W standardzie STQC używamy podstawy 4, więc najpierw musimy zamienić liczbę z podstawy 10 na 4:
+Spróbujmy przeprowadzić przykładowy proces enkodowania dla liczby **72**. W standardzie STQC używamy podstawy 4 (base 4), więc najpierw musimy zamienić liczbę z podstawy 10 na 4:
 
 **72** *(10)* = **1020** *(4)*
 
-**WAŻNE:** jeżeli przy enkodowaniu celujemy w konkretną długość sekwencji, jaką chcemy otrzymać (np. 7 i 8 w systemie selektywnego wybierania), dopisujemy na początku tyle zer, aby otrzymać liczbę, której zapis będzie tak długi, ile tonów ostatecznie chcemy otrzymać. Powiedzmy, że w tym przykładzie będzie to 7:
+**WAŻNE:** Jeżeli przy enkodowaniu celujemy w konkretną długość sekwencji, jaką chcemy otrzymać (np. 7 i 8 w systemie selektywnego wybierania), dopisujemy na początku tyle zer, aby otrzymać pożądaną długość liczby. Powiedzmy, że w tym przykładzie będzie to 7:
 
 **1020** -> **0001020**
 
-Teraz należy znaleźć dwie takie same liczby obok siebie i zamienić drugą z nich na 4. Robimy to po to, aby nigdy jeden ton nie był dłuższy niż 100ms (bo takiej długości dla każdego tonu używa standard STQC), bo mogłoby to skutkować błędnym zdekodowaniem przez odbiornik. **Jeżli pierwsza cyfra to 0, zamieniamy ją na 4 w pierwszej kolejności!**
+Teraz należy znaleźć wszystkie dwie takie same cyfry obok siebie i zamienić drugą z nich na 4. Robimy to po to, aby nigdy jeden ton nie był dłuższy niż 100ms (bo takiej długości dla każdego tonu używa standard STQC), bo mogłoby to skutkować błędnym zdekodowaniem przez odbiornik. **Jeżli pierwsza cyfra to 0, zamieniamy ją na 4 w pierwszej kolejności!**
 
 **0001020** -> **4041020**
 
-Teraz każdą otrzymaną cyfrę zamieniamy na odpowiedni ton, a każdemu tonowi nadajemy długość 100ms:
+Teraz każdą otrzymaną cyfrę zamieniamy na odpowiedni ton:
 
 **4041020** -> *2105Hz 980Hz 2105Hz 1197Hz 980Hz 1446Hz 980Hz*
 
@@ -50,9 +50,11 @@ Dostaliśmy taką sekwencję tonów:
 Na początku musimy zamienić te dźwięki na numery tonów.
 **UWAGA!** Gdy już zamienimy tony na numery, na początku musimy dołożyć 0
 
+*2105Hz 980Hz 2105Hz 1197Hz 1795Hz 2105Hz 980Hz* -> **4041340**
+
 *4041340* -> (dokładamy zero) *04041340*
 
-Teraz znajdujemy wszystkie czwórki i zamienimy je na liczbę przed nimi:
+Teraz znajdujemy wszystkie czwórki i zastępujemy je liczbami znajdującymi się przed nimi:
 
 *04041340* -> *00001330*
 

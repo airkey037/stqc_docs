@@ -7,7 +7,7 @@ This documentation applies to the following versions of Bartek's STQC decoder:
 
 ---
 
-## Decoding powiat number
+## Decoding and encoding powiat number
 
 You simply need to convert the first sequence to decimal, and the result will give you the powiat number as it is.
 

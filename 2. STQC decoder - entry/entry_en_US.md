@@ -12,12 +12,14 @@ Example:
 
 ## Radio specs
 
-OSP is using those VHF radio frequencies to send and exchange commands:
+Firefighters in Poland are using those VHF radio frequencies to send and exchange commands:
 
 ```text
 148.725 MHz - TX
 148.825 MHz - RX
 ```
+
+**NOTE:** Those channels are used **only** to exchange commands between sirens - the voice channels are completely separated, and their frequency depends on the region.
 
 * Modulation: **NFM** (Narrowband Frequency Modulation)
 * Channel bandwidth: 12.5 kHz

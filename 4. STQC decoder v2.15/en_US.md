@@ -9,7 +9,7 @@ This documentation applies to the following versions of Bartek's STQC decoder:
 
 ## Decoding Voivodeship number
 
-**IMPORTANT:** The voivodeship numbers aren't corresponding to the real administration divison (for example, units with different voivodeship numbers can practically be physically located the same one)
+**IMPORTANT:** The voivodeship numbers aren't corresponding to the real administration divison in Poland (for example, units with different voivodeship numbers can practically be physically located the same one)
 
 First of all, we need to decode the first sequence:
 
@@ -37,7 +37,7 @@ Result: **7**
 
 ## Decoding powiat number
 
-**IMPORTANT:** The powiat numbers aren't corresponding to the real administration divison (for example, units with different powiat numbers can practically be physically located the same one)
+**IMPORTANT:** The powiat numbers aren't corresponding to the real administration divison in Poland (for example, units with different powiat numbers can practically be physically located the same one)
 
 First of all, we need to decode the first sequence:
 
@@ -91,4 +91,4 @@ Finally, we are encoding this number using STQC (remember to force the output to
 
 ---
 
-In the *examples/* folder you can find Python programs that can encode/decode STQC sequence and determine Voivodeship and "powiat" number.
+In the *examples/* folder you can find Python programs that can encode/decode STQC sequence and determine Voivodeship and powiat number.

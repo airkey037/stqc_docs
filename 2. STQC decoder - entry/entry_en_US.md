@@ -2,7 +2,7 @@
 
 This documention is describing, how exactly STQC is used in OSP.
 
-The sequence used to send command to the receiver is constructed from 7 tones (100ms each one), 200ms break and 8 tones (100ms each one). Whole sequence is exactly 1.7s long.
+The sequence used to send commands to the receiver is constructed from 7 tones (100ms each one), 200ms break and 8 tones (100ms each one). The whole sequence is exactly 1.7s long.
 
 Example:
 

@@ -44,13 +44,13 @@ Project is shared under terms of GNU GPL 3.0 licence. You can whole license in t
 
 Project is divided into folders for easier navigation:
 
-1. **STQC encoding and decoding** - documentations in this folder are focused stricte on the STQC standard - detailed instructions about encoding and decoding numbers to specific tones. Documentation is available in those languages: Polish, English. In the *examples/* subfolder you can find Python programs that can encode/decode numbers to/from STQC sequences. [Information source](https://github.com/sq5bpf/multimon-ng-stqc)
-2. **STQC decoder - entry** - methods of encoding and decoding informations used to control alarm sirens. You can also find documented method, that [Bartek's STQC decoder (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) in version 2.10, 2.15 and 2.16 is using to determine unit number and command. I put them into one folder, because they are the same for all versions, so there is no need to put the same stuff in 3 folders.
-3. **STQC decoder v2.10** - in this folder you can find (short) documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) in version 2.10 is decoding "powiat*" number.
-4. **STQC decoder v2.15** - in this folder you can find documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) is decoding voivodeship and "powiat*" number.
+1. **STQC encoding and decoding** - documentations in this folder are focused strictly on the STQC standard - detailed instructions about encoding and decoding numbers to specific tones. In the *examples/* subfolder you can find Python programs that can encode/decode numbers to/from STQC sequences. [Information source](https://github.com/sq5bpf/multimon-ng-stqc)
+2. **STQC decoder - entry** - methods of encoding and decoding informations used to control alarm sirens. You can also find documented method, that [Bartek's STQC decoder (serwerbartka.pl)](https://serwerbartka.pl/dekoder-stqc/) in version 2.10, 2.15 and 2.16 is using to determine the unit number and command. I put them into one folder, because they are the same for all versions, so there is no need to put the same stuff in 3 folders.
+3. **STQC decoder v2.10** - in this folder you can find (short) documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) in version 2.10 is decoding powiat* number.
+4. **STQC decoder v2.15** - in this folder you can find documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) is decoding voivodeship and powiat* number.
 5. **STQC decoder v2.16** - in this folder you can find documentation, how [Bartek's STQC decoder](https://serwerbartka.pl/dekoder-stqc/) is decoding area number.
 
-\* I can't translate "powiat" to English, because I don't know any good word that matches exactly its meaning. Generally Voivodeships in Poland are divided into smaller administration regions called "powiats".
+\* I can't translate "powiat" to English, because I don't know any good word that matches exactly its meaning. Generally Voivodeships in Poland are divided into smaller administration regions called powiats.
 
 **pystqc.py** program is a full and powerful utility to encode, decode, transcode and generate all formats mentioned above. If you want to learn more, run:
 

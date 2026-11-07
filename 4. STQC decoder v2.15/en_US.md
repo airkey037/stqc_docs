@@ -2,43 +2,92 @@
 
 [Source](https://serwerbartka.pl/dekoder-stqc)
 
-Docs for version **2.15**
+This documentation applies to the following versions of Bartek's STQC decoder:
+* 2.15
 
 ---
 
 ## Decoding Voivodeship number
 
-We are taking the first sequence, and getting first 4 digits of the sequence:
+**IMPORTANT:** The voivodeship numbers aren't corresponding to the real administration divison (for example, units with different voivodeship numbers can practically be physically located the same one)
 
-**4024031** -> **4024**
+First of all, we need to decode the first sequence:
 
-Then, we are decoding those first 4 digits (like in folder 1) and decoding them to get Voivodeship number:
+**4013241** -> **489**
 
-**4024** -> **00022**
+Then, we need to use this formula:
 
-**00022** *(4)* = **10** *(10)*
+$$v = \lfloor \frac{s}{64} \rfloor$$
 
-Result: **10**
+Where:
+* v -> voivodeship number
+* s -> decimal representation of the first sequence
 
-Voivodeship number have to fit in range 0-63
+Plug the values:
+
+$$v = \lfloor \frac{489}{64} \rfloor$$
+
+$$v = 7$$
+
+Result: **7**
+
+**NOTE:** Voivodeship number have to fit in range 0-63
 
 ---
 
-## Decoding "powiat" number
+## Decoding powiat number
 
-We are taking last 3 digits of the first sequence:
+**IMPORTANT:** The powiat numbers aren't corresponding to the real administration divison (for example, units with different powiat numbers can practically be physically located the same one)
 
-**4024031** -> **031**
+First of all, we need to decode the first sequence:
 
-Then, we are decoding it using instructions from folder 1:
+**4013241** -> **489**
 
-**031** -> **0031**
+Then, we are using this formula:
 
-**0031** *(4)* = **13** *(10)*
+$$p = s \bmod 64$$
 
-Result: **13**
+Where:
+* p -> calculated powiat number
+* s -> decimal representation of the first sequence
 
-Powiat number have to fit in range 0-63.
+Plug the values:
+
+$$p = 489 \bmod 64$$
+
+$$p = 41$$
+
+Result: **41**
+
+**NOTE:** Powiat number have to fit in range 0-63.
+
+---
+
+## Encoding Voivodeship and Powiat number
+
+In order to do this, we must get Voivodeship and Powiat number in decimal (both within range 0-63). Example:
+
+Voivodeship: **31**
+Powiat: **14**
+
+Then, we are using this formula to get full decimal sequence:
+
+$$s = 64 \cdot v + p$$
+
+Where:
+* s -> decimal sequence
+* v -> voivodeship number (0-63)
+* p -> powiat number (0-63)
+
+Plug the values:
+
+$$s = 64 \cdot 31 + 14$$
+
+$$s = 1998$$
+
+Finally, we are encoding this number using STQC (remember to force the output to be exactly 7 tones long):
+
+**1998** -> **4134032**
 
 ---
 

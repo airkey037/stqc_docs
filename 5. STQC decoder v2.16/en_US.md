@@ -2,32 +2,62 @@
 
 [Source](https://serwerbartka.pl/dekoder-stqc/)
 
-Docs for version **2.16**
+This documentation applies to the following versions of Bartek's STQC decoder:
+* 2.16
 
 ---
 
 ## Decoding area number
 
-To decode area number, we need to take the input sequence, and divide it to 4-digit and 3-digit part:
+First of all, we need to decode the first sequence:
 
-**4014342** -> **4014** and **342**
+**4013241** -> **489**
 
-Then, we are decoding each one using method from folder 1:
+Then, we need to use this formula:
 
-**4014** -> **5**
-**342** -> **62**
+$$a = \lfloor \frac{s}{64} \rfloor \cdot 100 + s \bmod 64$$
 
-Finally, we need to join those two result numbers to get final result. In this case, the result is **562**.
+Where:
+* a -> area number
+* s -> decimal representation of the first sequence (must fit in range **0 - 4095**)
 
-### Important info!
+Plug the values:
 
-Each one of those parts **have to** fit in range 0-63, since those are **6-bit** numbers. So, allowed ranges are:
+$$a = \lfloor \frac{489}{64} \rfloor \cdot 100 + 489 \bmod 64$$
+$$a = \lfloor 7,640625 \rfloor \cdot 100 + 41$$
+$$a = 7 \cdot 100 + 41$$
+$$a = 741$$
 
-* 0-63
-* 100-163
-* 200-263
-...
-* 6300-6363
+Result: **741**
+
+---
+
+## Encoding area number
+
+To encode the area number, we need to ensure, that the area number satisfies this:
+
+$$(a \bmod 100) \in ([0; 63] \cap \N) \wedge \lfloor \frac{a}{100} \rfloor \in ([0; 63] \cap \N)$$
+
+In simple words, first two numbers and last two numbers have to fit in range 0-63.
+
+Then, we can use this formula, to convert the area number to the sequence's decimal representation:
+
+$$s = \lfloor \frac{a}{100} \rfloor \cdot 64 + (a \bmod 100)$$
+
+Where:
+* s -> decimal representation of the first sequence
+* a -> area number
+
+Let's try to encode area number **1832**.
+
+Plug the values:
+
+$$s = \lfloor \frac{1832}{100} \rfloor \cdot 64 + (1832 \bmod 100)$$
+$$s = \lfloor 18,32 \rfloor \cdot 64 + 32$$
+$$s = 18 \cdot 64 + 32$$
+$$s = 1184$$
+
+Result: **1184**
 
 ---
 

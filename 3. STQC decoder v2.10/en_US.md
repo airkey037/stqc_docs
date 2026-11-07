@@ -2,12 +2,13 @@
 
 [Source](https://serwerbartka.pl/dekoder-stqc)
 
-Docs for version **2.10**
+This documentation applies to the following versions of Bartek's STQC decoder:
+* 2.10
 
 ---
 
-## Decoding "powiat" number
+## Decoding powiat number
 
-It is simple - you are just converting first sequence to decimal, and the result is the "powiat" number.
+You simply need to convert the first sequence to decimal, and the result will give you the powiat number as it is.
 
-There is no example here, because you can just use programs from foler 1, while setting 7 digits.
+There is no example here, because you can just use the programs from folder 1 - remember, to force the output to be 7 tones long.

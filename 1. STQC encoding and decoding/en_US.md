@@ -23,19 +23,19 @@ Let's try encoding number 72. In STQC standard we are operating on numbers with 
 
 **72** *(10)* = **1020** *(4)*
 
-**IMPORTANT:** When we want our result to be n tones long, we can write additional 0's at the beginning. In "system selektywnego wywoływania" our sequences are 7 and 8 tones long. Let's say, that we want our sequence to be 7 tones long, so we are writing three 0's at the beginning.
+**IMPORTANT:** If we want the result to be n tones long, we can write additional 0's at the beginning. In normal STQC sequence schemes used in Poland, the sequences are 7 and 8 tones long. Let's say, that we want the sequence to be 7 tones long, so we need to write three 0's at the beginning.
 
 **1020** -> **0001020**
 
-Now, we need to find 2 identical numbers located next to each other, and replace 2nd number with **4**. We are doing it, because we want all tones to be exactly 100ms long, so decoder will decode it properly. **If first digit is 0, we are replacing it with 4 first!**
+Now, we need to find 2 identical numbers located next to each other, and replace the 2nd number with **4**. We are doing this, because we want all tones to be exactly 100ms long - if there 2 the same tones one after the other (with total length 200ms), the decoder will decode it as a single tone - this is why we need this transformation. **If first digit is 0, we need to replace it with 4!**
 
 **0001020** -> **4041020**
 
-Now, we can transform all digits to specific tones:
+Now, we can transform all digits to corresponding tones:
 
 **4041020** -> *2105Hz 980Hz 2105Hz 1197Hz 980Hz 1446Hz 980Hz*
 
-If you want to listen, how this sequence sounds like, you can use the command below to generate it:
+If you want to listen to how this sequence sounds like, you can use the command below to generate it:
 
 ```bash
 ffmpeg -filter_complex "sine=frequency=980,atrim=duration=0.1,asplit=3[t01][t02][t03];sine=frequency=1197,atrim=duration=0.1[t1];sine=frequency=1446,atrim=duration=0.1[t2];sine=frequency=2105,atrim=duration=0.1,asplit=2[t41][t42];anullsrc,atrim=duration=0.5,asplit=2[start][end];[start][t41][t01][t42][t1][t02][t2][t03][end]concat=v=0:a=1:n=9[aout]" -map "[aout]" -c:a libmp3lame -ar 44100 -ac 1 -f mp3 sequence_4041020.mp3
@@ -47,12 +47,12 @@ We've got the sequence below:
 
 *2105Hz 980Hz 2105Hz 1197Hz 1795Hz 2105Hz 980Hz*
 
-First of all, we need to transform those tones to their numbers.
-**WARNING!** After transforming tones to numbers, we need to add an extra zero at the beginning
+First of all, we need to transform those tones to their corresponding numbers.
+**IMPORTANT!** After transforming tones to numbers, we need to add an extra zero at the beginning
 
 *4041340* -> (adding 0) *04041340*
 
-Now, we need to find all 4's and replace them with digits before them:
+Now, we need to find all 4's and replace them with the digits before them:
 
 *04041340* -> *00001330*
 

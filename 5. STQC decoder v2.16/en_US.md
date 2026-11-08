@@ -36,7 +36,7 @@ Result: **741**
 
 To encode the area number, we need to ensure, that the area number satisfies this:
 
-$$(a \bmod 100) \in ([0; 63] \cap \N) \wedge \lfloor \frac{a}{100} \rfloor \in ([0; 63] \cap \N)$$
+$$(a \bmod 100) \in ([0; 63] \cap \mathbb{N}) \wedge \lfloor \frac{a}{100} \rfloor \in ([0; 63] \cap \mathbb{N})$$
 
 In simple words, first two numbers and last two numbers have to fit in range 0-63.
 

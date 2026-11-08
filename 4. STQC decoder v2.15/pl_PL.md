@@ -2,7 +2,8 @@
 
 [Źródło](https://serwerbartka.pl/dekoder-stqc)
 
-Dokumentacja dla wersji **2.15**
+Dokumentacja dla wersji:
+* 2.15
 
 ---
 

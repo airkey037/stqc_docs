@@ -8,13 +8,13 @@ Dokumentacja obejmuje następujące wersje:
 * 2.15
 * 2.16
 
-Ta strona opisuje, jak **Dekoder STQC Bartka** odczytuje numer jednostki oraz komendę.
+Ta strona opisuje, jak **Dekoder STQC Bartka** odczytuje numer jednostki oraz komendę. Wrzuciłem to do jednego pliku, ponieważ są one wspólne dla każdej wersji dekodera.
 
 Te informacje są przekazywane w **drugiej sekwencji** (tej ośmiocyfrowej, tej po przerwie), więc to tą sekwencję należy zdekodować.
 
 ---
 
-## Numer jednostki
+## Dekodowanie numeru jednostki
 
 Aby odczytać numer jednostki, po konwersji z sekwencji STQC na liczbę dziesiętną używamy funkcji **modulo** (reszty z dzielenia).
 
@@ -38,7 +38,7 @@ Wynik: **82**
 
 ---
 
-## Komenda
+## Dekodowanie komendy
 
 Aby odczytać komendę, dzielimy zdekodowaną sekwencję przez 1000 i zaokrąglamy w dół. Znów powiedzmy, że sekwencją jest **1082**:
 
@@ -65,9 +65,36 @@ Gdy masz już numer komendy, podstaw ją do tej tabelki, aby uzyskać jej nazwę
 | 8     | AI.OC3 |
 | 9     | FONIA  |
 
-**INFO:** Proszę nie kierować do mnie zapytań, co oznaczają te komendy - nie mam takich informacji.
+**INFO:** Proszę nie kierować do mnie zapytań, co oznaczają te komendy - nie mam takich informacji :(
 
 Wynik: 1 -> **ALARM**
+
+---
+
+## Enkodowanie numeru jednostki i komendy
+
+Aby zakodować numer jednostki i komendę (czyli drugą sekwencję), potrzebujesz zarówno numeru jednostki (z zakresu **0-999**), jak i komendy. ID komend można pozyskać z tabelki sekcję wyżej. Przeprowadźmy przykładowe enkodowanie:
+
+Wartości:
+* Numer jednostki: 519
+* Komenda: *TEST* -> 3
+
+Aby uzyskać dziesiętną wartość sekwencji, używamy tego wzoru:
+
+$$s = 1000 \cdot c + u$$
+
+Gdzie:
+* s - wynik, dziesiętna reprezentacja sekwencji
+* c - ID komendy
+* u - numer jednostki
+
+Podstawiamy wartości:
+
+$$s = 1000 \cdot 3 + 519$$
+
+$$s = 3519$$
+
+Wynik: **3519**
 
 ---
 

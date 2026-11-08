@@ -24,4 +24,10 @@ Firefighters in Poland are using those VHF radio frequencies to send and exchang
 * Modulation: **NFM** (Narrowband Frequency Modulation)
 * Channel bandwidth: 12.5 kHz
 
-You can use a radio receiver, like RTL-SDR v4, and try to receive those signals. **Remember, that transmitting is forbidden and illegal!!**
+You can use a radio receiver, like RTL-SDR v4, and try to receive those signals. According to the [Prawo komunikacji elektronicznej](https://isap.sejm.gov.pl/isap.nsf/download.xsp/WDU20240001221/T/D20241221L.pdf):
+
+```text
+1. Nie wymaga pozwolenia używanie urządzeń radiowych przeznaczonych wyłącznie do odbioru.
+```
+
+**Remember, that transmitting is forbidden and illegal!!**

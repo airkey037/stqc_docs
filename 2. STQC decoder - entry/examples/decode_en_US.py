@@ -17,7 +17,7 @@ CMDS = {
 	9: "FONIA"
 }
 
-# Try to get decimal representation of 2nd sequence
+# Try to get a decimal representation of the 2nd sequence
 try:
 	sq_dec = int(argv[1])
 except IndexError:
@@ -29,12 +29,12 @@ except ValueError:
 	print("Invalid input number!")
 	exit(2)
 
-# Sequence can't be bigger than 9999 and can't be negative. Check it
+# Sequence can't be larger than 9999 and can't be negative. Check it
 if sq_dec < 1 or sq_dec > 9999:
 	print("Input number have to fit in range 1-9999")
 	exit(2)
 
-# Calculate unit ID and command
+# Calculate the unit ID and command ID
 unit = sq_dec % 1000
 cmd = CMDS[int(sq_dec / 1000)]
 

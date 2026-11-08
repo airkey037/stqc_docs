@@ -11,7 +11,7 @@ from os import remove
 argv.pop(0)
 sequence = " ".join(argv)
 
-# If sequence is empty, display help message
+# If the sequence is empty, display help message
 if len(sequence) == 0:
 	print("Usage: python3 generate_en_US.py <sequence>")
 	exit(0)
@@ -35,7 +35,7 @@ for tone in sequence:
 		print(f"{tone} is not a valid STQC tone! Allowed options: {", ".join(FREQS.keys())}, SPACE (break)")
 		exit(2)
 
-# Create file name
+# Create a file name
 filename = f"sequence_{sequence.replace(" ","_").strip("_")}.mp3"
 
 # Start FFmpeg
@@ -46,27 +46,27 @@ except FileNotFoundError:
 	print("FFmpeg is not installed or not in your PATH!")
 	exit(19)
 
-# Start loop that comes through every tone
+# Start the loop that comes through every tone
 for tone in sequence:
 	# Create a blank array for every sample
 	pcm = bytearray()
 	# Check, is it tone or break
 	if tone == " ":
-		# This is break, add silence
+		# This is a break, add silence
 		for _ in range(int(SAMPLE_RATE * BREAK_LENGTH)):
 			# Add 2 bytes of silence
 			pcm.append(0)
 			pcm.append(0)
 	else:
-		# This is tone, add it
+		# This is a tone, add it
 		for sn in range(int(SAMPLE_RATE * TONE_LENGTH)):
 			# Generate sample using math functions
 			sample = sin(2 * pi * FREQS[tone] * sn / SAMPLE_RATE)
-			# Multiply calculated sample to be in typical s16le range
+			# Multiply calculated sample to fit into the typical s16le range
 			value = int(sample * 32767)
-			# Add calculated sample to the list in little endian format
+			# Add the calculated sample to the list in little endian format
 			pcm.extend(value.to_bytes(2, byteorder="little", signed=True))
-	# Check, is process still alive
+	# Check, is the process still alive
 	if ffmpeg.poll() is not None:
 		print(f"FFmpeg process finished unexpected with code {ffmpeg.returncode}")
 		remove(filename)

@@ -1,16 +1,16 @@
 # Guide to FFmpeg installation
 
-In this file you can find full manual, how to install FFmpeg on any OS.
+In this file you can find the full manual, how to install FFmpeg on any OS.
 
 ### Windows
 
-To install FFmpeg, open PowerShell app and type following command:
+To install FFmpeg on Windows, open PowerShell and type following command:
 
 ```powershell
 winget install ffmpeg
 ```
 
-...and wait for the command to finish its work.
+Then, and wait for the command to finish its work.
 
 ### MacOS
 
@@ -20,11 +20,11 @@ Open Terminal and type:
 brew install ffmpeg
 ```
 
-when command finished its work, FFmpeg is install and ready to work!
+And wait for the command to finish its work. FFmpeg is installed!
 
 ### Linux
 
-On Linux, use command specific for your distro:
+On Linux, use the command specific for your distro:
 
 ```bash
 # Ubuntu/Debian

@@ -80,6 +80,6 @@ for tone in sequence:
 		remove(filename)
 		exit(19)
 
-# Zamknij stdin i poczekaj, aż zakończy enkodowanie
+# Zamknij stdin i poczekaj, aż FFmpeg zakończy enkodowanie
 ffmpeg.stdin.close()
 ffmpeg.wait()

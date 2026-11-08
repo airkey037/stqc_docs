@@ -3,7 +3,7 @@
 # Import required modules
 from sys import argv, exit
 
-# Define some variables
+# Define commands IDs
 CMDS = {
 	"KASUJ": 0,
 	"ALARM": 1,
@@ -17,7 +17,7 @@ CMDS = {
 	"FONIA": 9
 }
 
-# Try to get unit ID and command
+# Try to get the unit ID and command ID
 try:
 	unit = int(argv[1])
 	cmd = CMDS[argv[2].upper()]

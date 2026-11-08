@@ -4,13 +4,13 @@ W tym pliku znajdziesz pełną instrukcję, jak zainstalować FFmpeg na każdym 
 
 ### Windows
 
-Aby zainstalować FFmpeg na Windowsie, otwórz aplikację PowerShell i wpisz poniższą komendę:
+Aby zainstalować FFmpeg na Windowsie, otwórz PowerShell i wpisz poniższą komendę:
 
 ```powershell
 winget install ffmpeg
 ```
 
-...a następnie poczekaj, aż komenda zakończy działanie
+...a następnie poczekaj, aż komenda zakończy działanie.
 
 ### MacOS
 

@@ -22,7 +22,7 @@ try:
 	unit = int(argv[1])
 	cmd = CMDS[argv[2].upper()]
 except IndexError:
-	# Użytkownik nie sprecyzował numeru jednostki lub komendy, wyświetl pomoc
+	# Użytkownik nie podał numeru jednostki lub komendy, wyświetl pomoc
 	print(f"Przykład użycia: python3 encode_pl_PL.py <numer jednostki> <komenda>\nDozwolone komendy: {", ".join(CMDS.keys())}")
 	exit(0)
 except ValueError:
@@ -38,6 +38,6 @@ except KeyError:
 if unit < 0 or unit > 999:
 	print("Numer jednostki nie mieści się w przedziale 0-999!")
 	exit(2)
-
+w
 # Oblicz i wyświetl dziesiętną reprezentację drugiej sekwencji
 print(cmd * 1000 + unit)

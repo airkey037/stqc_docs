@@ -1,10 +1,10 @@
-# Example Python program to encode numbers using STQC (English version)
+# An example Python program to encode numbers using STQC (English version)
 
 # Import required libraries
 from sys import argv, exit
 import re
 
-# Function that converts from Base10 (digits 0-9) to Base4 (digits 0-3, like in STQC)
+# Function that converts number from Base10 (digits 0-9) to Base4 (digits 0-3)
 def base10_to_base4(base10:int)->str:
 	if base10 < 0:
 		return None
@@ -17,7 +17,7 @@ def base10_to_base4(base10:int)->str:
 		numbers.append(str(int(d1+d2,2)))
 	return "".join(numbers)
 
-# Get number; if not presented, display help message
+# Get the number; if not presented, display help message
 try:
 	to_encode = int(argv[1])
 except IndexError:
@@ -25,14 +25,14 @@ except IndexError:
 	print("Usage: python3 encode_en_US.py <number> <output n digits (optional)>")
 	exit(0)
 except ValueError:
-	# Input value is not a number
+	# The input value is not a number
 	print("Given number is not a correct decimal number!")
 	exit(2)
 
-# Transform entered string to Base4
+# Transform the entered string to Base4
 transformed = base10_to_base4(to_encode)
 
-# Check, was input number a negative number
+# Check, was the input number a negative number
 if transformed is None:
 	print("Input number can't be a negative number!")
 	exit(2)
@@ -43,12 +43,12 @@ as_list = list(transformed)
 # Add 0's at the beginning, if 2nd parameter is given
 try:
 	total_digits = int(argv[2])
-	# Check, is total digits less then minimum required
+	# Check, is the total digits value less then minimum required
 	if total_digits < len(as_list):
 		# This isn't allowed, report an error
 		print(f"Output length set by the user is too short! {len(as_list)} required, {total_digits} wanted")
 		exit(2)
-	# If everything is correct, expand list with 0's
+	# If everything is correct, expand the list with 0's
 	as_list = ['0'] * (total_digits - len(as_list)) + as_list
 except IndexError:
 	# We can ignore it
@@ -58,11 +58,11 @@ except ValueError:
 	print("Output length set by the user isn't a correct number!")
 	exit(2)
 
-# If first digit is a 0, replace it with 4 (decoder needs this transformation)
+# If the first digit is a 0, replace it with 4 (decoder needs this transformation)
 if as_list[0] == "0":
 	as_list[0] = "4"
 
-# Replace repeated characters using Regex
+# Replace the repeated characters using Regex
 final = re.sub(r"([0-3])\1",r"\g<1>4","".join(as_list))
 
 # Output the final result

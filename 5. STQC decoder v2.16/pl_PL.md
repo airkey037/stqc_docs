@@ -2,32 +2,62 @@
 
 [Źródło](https://serwerbartka.pl/dekoder-stqc/)
 
-Dokumentacja dla wersji **2.16**
+Dokumentacja dla wersji:
+* 2.16
 
 ---
 
 ## Dekodowanie numeru obszaru
 
-Aby zdekodować numer obszaru, bierzemy pierwszą sekwencję i dzielimy ją na 2 części o długościach 4 i 3 cyfry:
+Na początek dekodujemy sekwencję:
 
-**4014342** -> **4014** oraz **342**
+**4013241** -> **489**
 
-Następnie dekodujemy każdą z nich używając metody z folderu 1:
+Później używamy tego wzoru:
 
-**4014** -> **5**
-**342** -> **62**
+$$a = \lfloor \frac{s}{64} \rfloor \cdot 100 + s \bmod 64$$
 
-Na końcu łączymy te dwa wyniki w celu uzyskania numeru obszaru. W tym przypadku wynik to **562**.
+Gdzie:
+* a -> wynik, numer obszaru
+* s -> dziesiętna reprezentacja sekwencji (musi zmieścić się w zakresie **0 - 4095**)
 
-### Ważna informacja!
+Podstawiamy wartości:
 
-Każda z tych części **musi** zmieścić się w zakresie 0-63, ponieważ są to liczby **6-bitowe**. Dozwolone zakresy to:
+$$a = \lfloor \frac{489}{64} \rfloor \cdot 100 + 489 \bmod 64$$
+$$a = \lfloor 7,640625 \rfloor \cdot 100 + 41$$
+$$a = 7 \cdot 100 + 41$$
+$$a = 741$$
 
-* 0-63
-* 100-163
-* 200-263
-...
-* 6300-6363
+Wynik: **741**
+
+---
+
+## Enkodowanie numeru obszaru
+
+Zanim zaczniemy, musimy upewnić się, że numer obszaru, który chcemy zakodować, spełnia:
+
+$$(a \bmod 100) \in ([0; 63] \cap \mathbb{N}) \wedge \lfloor \frac{a}{100} \rfloor \in ([0; 63] \cap \mathbb{N})$$
+
+W prostych słowach, pierwsze 2 cyfry i ostatnie 2 cyfry muszą mieścić się w zakresie 0-63.
+
+Później do faktycznego przekształcenia używamy tego wzoru:
+
+$$s = \lfloor \frac{a}{100} \rfloor \cdot 64 + (a \bmod 100)$$
+
+Gdzie:
+* s -> wynik, dziesiętna reprezentacja sekwencji
+* a -> numer obszaru
+
+Spróbujmy zakodować numer obszaru **1832**.
+
+Podstawiamy:
+
+$$s = \lfloor \frac{1832}{100} \rfloor \cdot 64 + (1832 \bmod 100)$$
+$$s = \lfloor 18,32 \rfloor \cdot 64 + 32$$
+$$s = 18 \cdot 64 + 32$$
+$$s = 1184$$
+
+Wynik: **1184**
 
 ---
 

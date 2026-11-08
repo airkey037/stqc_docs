@@ -2,71 +2,22 @@
 
 # Zaimportuj wymagane moduły
 from sys import exit, argv
-import re
-
-# Funkcja konwertująca Base10 na Base4
-def base10_to_base4(base10:int)->str:
-	if base10 < 0:
-		return None
-	binsgn = bin(base10)[2:]
-	if len(binsgn) % 2 != 0:
-		binsgn = "0" + binsgn
-	it = iter(binsgn)
-	numbers = []
-	for d1, d2 in zip(it, it):
-		numbers.append(str(int(d1+d2,2)))
-	return "".join(numbers)
-
-# Funkcja, która zwraca gotową sekwencję STQC
-def genstqc(sq:int, characters:int=None)->str:
-	# Zamień sekwencję wejściową z Base10 do Base4
-	transformed = base10_to_base4(sq)
-	# Sprawdź, czy jest to liczba ujemna
-	if transformed is None:
-		raise ValueError("Input number can't be a negative number!")
-	# Zamień string na listę
-	as_list = list(transformed)
-	# Dodaj 0 na początku, jeżeli użytkownik sprecyzował liczbę cyfr
-	if characters is not None:
-		# Sprawdź, czy liczba znaków żądanych przez użytkownika nie jest mniejsza niż wymagana
-		if characters < len(as_list):
-			# To nie jest dozwolone
-			raise ValueError(f"Output length set by the user is too short! {len(as_list)} required, {characters} wanted")
-		# Jeżeli wszystko jest poprawne, dodaj zera na początku
-		as_list = ['0'] * (characters - len(as_list)) + as_list
-	# Zwróć wynik
-	return "".join(as_list)
 
 # Pobierz numer obszaru
 try:
-	area = f"{int(argv[1]):04d}"
+	area = int(argv[1])
 except IndexError:
 	# Wyświetl pomoc
 	print("Poprawne użycie: python3 encode_pl_PL.py <obszar>")
 	exit(2)
 except ValueError:
-	# Niepoprawny numer obszaru!
+	print("To nie jest poprawna liczba dziesiętna!")
+	exit(2)
+
+# Sprawdź, czy numer obszaru jest poprawny
+if not ((0 <= (area // 100) <= 63) and (0 <= (area % 100) <= 63)):
 	print("Niepoprawny numer obszaru!")
 	exit(2)
 
-# Rozdziel numer obszaru na 2 części
-area1 = int(area[:2])
-area2 = int(area[2:])
-
-# Sprawdź, czy obie części mieszczą się w zakresie 0-63
-if area1 < 0 or area1 > 63:
-	print(f"Pierwsza część numeru obszaru musi mieścić się w zakresie 0-63! (otrzymano {area1})")
-	exit(2)
-if area2 < 0 or area2 > 63:
-	print(f"Druga część numeru obszaru musi mieścić się w zakresie 0-63! (otrzymano {area2})")
-	exit(2)
-
-# Policz sekwencję wyjściową
-area1_sq = genstqc(area1, 4)
-area2_sq = genstqc(area2, 3)
-
-# Zamień powtarzające się znaki na 4 używając wyrażeń regularnych
-final = re.sub(r"([0-3])\1",r"\g<1>4","0" + area1_sq + area2_sq)[1:]
-
 # Wyświetl wynik
-print(final)
+print((area // 100) * 64 + (area % 100))
